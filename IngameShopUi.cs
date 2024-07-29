@@ -1,5 +1,6 @@
 namespace IngameShop;
 
+using Sons.Gui;
 using Sons.Items.Core;
 using SonsSdk;
 using SUI;
@@ -69,7 +70,7 @@ public class IngameShopUi
         var CoulumContainer = SScrollContainer
             .Dock(EDockType.Fill)
             .Vertical(10, "EX")
-            .Padding(300, 300, 150, 0)
+            .Padding(100, 100, 150, 0)
             .As<SScrollContainerOptions>();
         CoulumContainer.ContainerObject.Spacing(4);
         CoulumContainer.SetParent(mainContainer);
@@ -85,6 +86,12 @@ public class IngameShopUi
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1.SetParent(Item1RowContainer);
+
+        var setItem1Price = STextbox
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
+            .PHeight(10).FontSize(24).Text("Price ID:")
+            .HFill().Notify(SetPrice1FromUI);
+        setItem1Price.SetParent(Item1RowContainer);
 
         var Item1Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1Btn.OnClick(() =>
@@ -106,6 +113,12 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2.SetParent(Item2RowContainer);
 
+        var setItem2Price = STextbox
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
+            .PHeight(10).FontSize(24).Text("Price ID:")
+            .HFill().Notify(SetPrice2FromUI);
+        setItem2Price.SetParent(Item2RowContainer);
+
         var Item2Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2Btn.OnClick(() =>
         {
@@ -125,6 +138,12 @@ public class IngameShopUi
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3.SetParent(Item3RowContainer);
+
+        var setItem3Price = STextbox
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
+            .PHeight(10).FontSize(24).Text("Price ID:")
+            .HFill().Notify(SetPrice3FromUI);
+        setItem3Price.SetParent(Item3RowContainer);
 
         var Item3Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3Btn.OnClick(() =>
@@ -146,6 +165,12 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4.SetParent(Item4RowContainer);
 
+        var setItem4Price = STextbox
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
+            .PHeight(10).FontSize(24).Text("Price ID:")
+            .HFill().Notify(SetPrice4FromUI);
+        setItem4Price.SetParent(Item4RowContainer);
+
         var Item4Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4Btn.OnClick(() =>
         {
@@ -165,6 +190,12 @@ public class IngameShopUi
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5.SetParent(Item5RowContainer);
+
+        var setItem5Price = STextbox
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
+            .PHeight(10).FontSize(24).Text("Price ID:")
+            .HFill().Notify(SetPrice5FromUI);
+        setItem5Price.SetParent(Item5RowContainer);
 
         var Item5Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5Btn.OnClick(() =>
@@ -198,7 +229,7 @@ public class IngameShopUi
             .Background(ComponentBlack)
             .Height(50);
         AddItemContainer.SetParent(CoulumContainer);
-        AddItemButton = SLabel.Text("Add 1x Item").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50).Visible(false);
+        AddItemButton = SLabel.Text("Add 1x Item From Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50).Visible(false);
         AddItemButton.OnClick(() =>
         {
             AddItemFromUi();
@@ -227,6 +258,10 @@ public class IngameShopUi
     internal static void CloseAddPanel()
     {
         TogglePanel("ShopAdminUi", false);
+        if (PauseMenu.IsActive)
+        {
+            PauseMenu._instance.Close();
+        }
     }
 
     internal static bool IsPanelActive()
@@ -235,58 +270,68 @@ public class IngameShopUi
     }
     internal static void OnKeyClick()
     {
+        if (!LocalPlayer.IsInWorld || LocalPlayer.IsInInventory || PauseMenu.IsActive) { return; }
         Transform transform = LocalPlayer._instance._mainCam.transform;
         RaycastHit raycastHit;
-        Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+        Physics.Raycast(transform.position, transform.forward, out raycastHit, 5f, LayerMask.GetMask(new string[]
         {
                 "Default"
         }));
-        if (shouldRunAdminUi)
+        if (raycastHit.collider == null || raycastHit.collider.transform.root == null) { return; }
+        Misc.Msg($"Hit: {raycastHit.collider.transform.root.name}");
+        if (raycastHit.collider.transform.root.name.Contains("Shop"))
         {
-            //if (Vector3.Distance(LocalPlayer.Transform.position, Shop.transform.position) > 10) { return; }
-            //if (Input.GetKeyDown(KeyCode.E))
-            if (add.IsActive)
+            GameObject shop = raycastHit.collider.transform.root.gameObject;
+            Mono.ShopInventory shopInventory = shop.GetComponent<Mono.ShopInventory>();
+            Mono.ShopGeneric shopGeneric = shop.GetComponent<Mono.ShopGeneric>();
+            if (shopInventory != null && shopGeneric != null)
             {
-                IHeldOnlyItemController heldController = LocalPlayer.Inventory.HeldOnlyItemController;
-                if (heldController != null)
+                if (shopGeneric.shouldRunAdminUi)
                 {
-                    if (heldController.Amount > 0)
+
+                    if (shopGeneric.add.IsActive)
                     {
-                        if (heldController.Amount == 1)
+                        IHeldOnlyItemController heldController = LocalPlayer.Inventory.HeldOnlyItemController;
+                        if (heldController != null)
                         {
-                            heldController.PutDown(false, false, false);
-                            int item = heldController.HeldItem._itemID;
-                            inventory.AddItem(item, 1);
-                        }
-                        else
-                        {
-                            int item = heldController.HeldItem._itemID;
-                            heldController.PutDown(false, false, false);
-                            inventory.AddItem(item, heldController.Amount);
+                            if (heldController.Amount > 0)
+                            {
+                                if (heldController.Amount == 1)
+                                {
+                                    heldController.PutDown(false, false, false);
+                                    int item = heldController.HeldItem._itemID;
+                                    shopInventory.AddItem(item, 1);
+                                }
+                                else
+                                {
+                                    int item = heldController.HeldItem._itemID;
+                                    heldController.PutDown(false, false, false);
+                                    shopInventory.AddItem(item, heldController.Amount);
+                                }
+                            }
+                            else
+                            {
+                                IngameShopUi.OpenPanel("ShopAdminUi");
+                                if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
+                                {
+                                    PauseMenu._instance.Open();
+                                }
+                                IngameShopUi.inventory = shopInventory;
+                                IngameShopUi.UpdateItemsUI();
+
+                            }
                         }
                     }
-                    else
+
+                    else if (shopGeneric.remove.IsActive)
                     {
-                        IngameShopUi.OpenPanel("ShopAdminUi");
-                        //IngameShopUi.inventory = inventory;
-                        IngameShopUi.UpdateItemsUI();
 
                     }
                 }
-                //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
-                //{
-                //    Misc.Msg($"Left Hand Holding: Name: {LocalPlayer.Inventory.LeftHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.LeftHandItem._itemID}");
-                //}
-                //if (!LocalPlayer.Inventory.IsRightHandEmpty())
-                //{
-                //    Misc.Msg($"Right Hand Holding: Name: {LocalPlayer.Inventory.RightHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.RightHandItem._itemID}");
             }
-
-            else if (remove.IsActive)
-            {
-
-            }
+            
         }
+        
     }
 
     internal static async Task SendUiMessage(SUiElement<SLabelOptions> sLabel, string message)
@@ -363,6 +408,67 @@ public class IngameShopUi
                 UpdateItemsUI();
             }
             
+        }
+    }
+
+    public static void SetPrice1FromUI(string text)
+    {
+        int itemId;
+        if (int.TryParse(text, out itemId))
+        {
+            SetPrice(itemId, 1);
+        }
+    }
+    private static void SetPrice2FromUI(string text)
+    {
+        int itemId;
+        if (int.TryParse(text, out itemId))
+        {
+            SetPrice(itemId, 2);
+        }
+    }
+    private static void SetPrice3FromUI(string text)
+    {
+        int itemId;
+        if (int.TryParse(text, out itemId))
+        {
+            SetPrice(itemId, 3);
+        }
+    }
+    private static void SetPrice4FromUI(string text)
+    {
+        int itemId;
+        if (int.TryParse(text, out itemId))
+        {
+            SetPrice(itemId, 4);
+        }
+    }
+    private static void SetPrice5FromUI(string text)
+    {
+        int itemId;
+        if (int.TryParse(text, out itemId))
+        {
+            SetPrice(itemId, 5);
+        }
+    }
+
+    public static void SetPrice(int itemId, int element)
+    {
+        ItemData item = ItemDatabaseManager.ItemById(itemId);
+        if (item != null)
+        {
+            if (item.Id != 0)
+            {
+                var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
+                string text = itemUIElements[element - 1].TextObject.text;
+                int? itemIdExtracted = ExtractItemKey(text);
+                if (itemIdExtracted != null)
+                {
+                    inventory.SetPrice((int)itemIdExtracted, itemId);
+                    inventory.UpdatePriceUi();
+                }
+                
+            }
         }
     }
 

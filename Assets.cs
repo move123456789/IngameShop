@@ -15,5 +15,8 @@ namespace IngameShop
 
         [AssetReference("TakeWhite")]
         public static Texture2D TakeIcon { get; set; }
+
+        [AssetReference("Buy")]
+        public static Texture2D BuyIcon { get; set; }
     }
 }

@@ -7,10 +7,12 @@ namespace IngameShop.Mono
     public class ShopInventory : MonoBehaviour
     {
         public Dictionary<int, int> HeldInventory = new Dictionary<int, int>();
+        private Dictionary<int, int> PriceDict = new Dictionary<int, int>();
+        private Mono.ShopWorldUi shopWorldUi = null;
 
         private void Start()
         {
-
+            if (shopWorldUi == null) { shopWorldUi = gameObject.GetComponent<Mono.ShopWorldUi>(); }
         }
 
         public void AddItem(int itemID, int quantity)
@@ -28,6 +30,7 @@ namespace IngameShop.Mono
             {
                 HeldInventory.Add(itemID, quantity);
             }
+            UpdateUi();
         }
 
         public void RemoveItem(int itemID, int quantity)
@@ -42,6 +45,7 @@ namespace IngameShop.Mono
                     {
                         HeldInventory.Remove(itemID); // Optionally remove the item if quantity is zero or less
                     }
+                    UpdateUi();
                 }
                 else
                 {
@@ -70,12 +74,47 @@ namespace IngameShop.Mono
         public void ClearInventory()
         {
             HeldInventory.Clear();
+            UpdateUi();
         }
 
         public void SetInventoryItems(Dictionary<int, int> items)
         {
             HeldInventory.Clear();
             HeldInventory = items;
+            UpdateUi();
+        }
+
+        public void SetPrice(int itemId, int priceItemId)
+        {
+            if (PriceDict.ContainsKey(itemId))
+            {
+                PriceDict[itemId] = priceItemId;
+            } else
+            {
+                PriceDict.Add(itemId, priceItemId);
+            }
+            UpdateUi();
+        }
+
+        public void SetPriceList(Dictionary<int, int> items)
+        {
+            PriceDict.Clear();
+            PriceDict = items;
+            UpdateUi();
+        }
+
+        public int GetPrice(int itemId) {  return PriceDict[itemId]; }
+
+        public Dictionary<int, int> GetPriceList() { return PriceDict; }
+
+        private void UpdateUi()
+        {
+            if (shopWorldUi != null) { shopWorldUi.UpdateUi(); }
+        }
+
+        public void UpdatePriceUi()
+        {
+            if (shopWorldUi != null) { shopWorldUi.UpdatePriceUiOnly(); }
         }
     }
 }

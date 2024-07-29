@@ -1,6 +1,7 @@
 ﻿using Sons.Gui.Input;
 using Sons.Multiplayer;
 using SonsSdk;
+using TheForest.Items.Craft;
 using TheForest.Utils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ namespace IngameShop
                 shop = GameObject.Instantiate(Assets.Shop);
                 Mono.ShopInventory shopMono = shop.AddComponent<Mono.ShopInventory>();
                 Mono.ShopGeneric shopGeneric = shop.AddComponent<Mono.ShopGeneric>();
+                Mono.ShopWorldUi shopWorldUi = shop.AddComponent<Mono.ShopWorldUi>();
             }
         }
 
@@ -75,7 +77,7 @@ namespace IngameShop
                     addLinkUi._applyTexture = true;
                     addLinkUi._texture = Assets.InsertIcon;
                     addLinkUi._maxDistance = 2;
-                    addLinkUi._worldSpaceOffset = new Vector3(0, (float)0.5, 0);
+                    addLinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
                     addLinkUi._text = "";
                     addLinkUi._uiElementId = "screen.take";
                     addLinkUi.enabled = false;
@@ -87,8 +89,8 @@ namespace IngameShop
                     reciveLinkUi._applyTexture = true;
                     reciveLinkUi._texture = Assets.TakeIcon;
                     reciveLinkUi._maxDistance = 2;
-                    reciveLinkUi._worldSpaceOffset = new Vector3(0, (float)0.5, 0);
-                    addLinkUi._text = "";
+                    reciveLinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
+                    reciveLinkUi._text = "";
                     reciveLinkUi._uiElementId = "screen.take";
                     reciveLinkUi.enabled = false;
                     reciveLinkUi.enabled = true;
@@ -101,6 +103,20 @@ namespace IngameShop
                 {
                     shopGeneric.SetOwner(ownerName);
                     shopGeneric.SteamId = steamId;
+
+                    LinkUiElement item1LinkUi = shopCopy.transform.FindChild("BuyStation").FindChild("1").FindChild("LinkUI").gameObject.AddComponent<LinkUiElement>(); ;
+                    item1LinkUi._applyMaterial = false;
+                    item1LinkUi._applyText = false;
+                    item1LinkUi._applyTexture = true;
+                    item1LinkUi._texture = Assets.BuyIcon;
+                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
+                    item1LinkUi._text = "";
+                    item1LinkUi._uiElementId = "screen.take";
+                    item1LinkUi.enabled = false;
+                    item1LinkUi.enabled = true;
+
+                    shopGeneric.item1 = item1LinkUi;
                 }
 
                 if (Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)

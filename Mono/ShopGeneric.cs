@@ -20,7 +20,8 @@ namespace IngameShop.Mono
 
         public LinkUiElement add;
         public LinkUiElement remove;
-        private bool shouldRunAdminUi = false;
+        public LinkUiElement item1;
+        public bool shouldRunAdminUi = false;
         private GameObject Shop = null;
 
         private void Start ()
@@ -63,57 +64,6 @@ namespace IngameShop.Mono
                 _shopText.text = $"{name}'s\nShop";
             }
         }
-
-        private void Update()
-        {
-            if (shouldRunAdminUi)
-            {
-                if (Vector3.Distance(LocalPlayer.Transform.position, Shop.transform.position) > 10) { return; }
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if (add.IsActive)
-                    {
-                        IHeldOnlyItemController heldController = LocalPlayer.Inventory.HeldOnlyItemController;
-                        if (heldController != null)
-                        {
-                            if (heldController.Amount > 0)
-                            {
-                                if (heldController.Amount == 1)
-                                {
-                                    heldController.PutDown(false, false, false);
-                                    int item = heldController.HeldItem._itemID;
-                                    inventory.AddItem(item, 1);
-                                }
-                                else
-                                {
-                                    int item = heldController.HeldItem._itemID;
-                                    heldController.PutDown(false, false, false);
-                                    inventory.AddItem(item, heldController.Amount);
-                                }
-                            }
-                            else
-                            {
-                                IngameShopUi.OpenPanel("ShopAdminUi");
-                                IngameShopUi.inventory = inventory;
-                                IngameShopUi.UpdateItemsUI();
-
-                            }
-                        }
-                        //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
-                        //{
-                        //    Misc.Msg($"Left Hand Holding: Name: {LocalPlayer.Inventory.LeftHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.LeftHandItem._itemID}");
-                        //}
-                        //if (!LocalPlayer.Inventory.IsRightHandEmpty())
-                        //{
-                        //    Misc.Msg($"Right Hand Holding: Name: {LocalPlayer.Inventory.RightHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.RightHandItem._itemID}");
-                        }
-                    }
-                    else if (remove.IsActive)
-                    {
-                        
-                    }
-                }
-            }
         }
     }
 
