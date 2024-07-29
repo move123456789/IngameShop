@@ -15,6 +15,11 @@ namespace IngameShop.Mono
 
         public void AddItem(int itemID, int quantity)
         {
+            if (HeldInventory.Keys.Count >= 5)
+            {
+                Misc.Msg("Can't Add More Than 5 Items To The Shop");
+                return;
+            }
             if (HeldInventory.ContainsKey(itemID))
             {
                 HeldInventory[itemID] += quantity;

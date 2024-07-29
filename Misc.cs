@@ -4,6 +4,8 @@ using Sons.Gui;
 using TheForest.Utils;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using Bolt;
+using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace IngameShop
 {
@@ -87,7 +89,7 @@ namespace IngameShop
                 Misc.Msg("Dialog Manager is NOT Found!");
             }
             AddOnQuitWorld();
-
+            ShopPrefabs.SetupShopPrefab();
         }
 
         public static GameObject FindObjectInSpecificScene(string sceneName = "SonsMain", string objectName = "ModalDialogManager") // ModalDialogManager as Standard
@@ -116,6 +118,20 @@ namespace IngameShop
             }
 
             // Return null if the GameObject was not found
+            return null;
+        }
+
+        internal static string GetLocalPlayerUsername()
+        {
+            if (Misc.GetHostMode() == SimpleSaveGameType.SinglePlayer) { return "SmokyAce"; }
+            if (LocalPlayer.Entity.Entity.NetworkId == new NetworkId(0)) { Misc.Msg("Error GetLocalPlayerUsername"); return null; }
+            var playerSetup = GameObject.FindObjectsOfType<BoltPlayerSetup>()
+                                        .FirstOrDefault(bps => bps._entity._entity.NetworkId == LocalPlayer.Entity.Entity.NetworkId);
+            if (playerSetup != null)
+            {
+                string username = playerSetup.state.name;
+                return username;
+            }
             return null;
         }
     }

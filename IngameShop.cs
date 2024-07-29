@@ -1,5 +1,9 @@
-﻿using SonsSdk;
+﻿using Sons.Prefabs;
+using SonsSdk;
+using SonsSdk.Attributes;
 using SUI;
+using TheForest.Utils;
+using UnityEngine;
 
 namespace IngameShop;
 
@@ -49,5 +53,27 @@ public class IngameShop : SonsMod
         Misc.OnHostModeGotten -= Misc.OnHostModeGottenCorrectly;
         Misc.dialogManager.QuitGameConfirmDialog.remove_OnOption1Clicked((Il2CppSystem.Action)OnLeaveWorld);
 
+    }
+
+    [DebugCommand("shop")]
+    private void shop(string args)
+    {
+        Misc.Msg("Spawning prefab");
+        Transform transform = LocalPlayer._instance._mainCam.transform;
+        RaycastHit raycastHit;
+        Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+        {
+                "Terrain"
+        }));
+        switch (args.ToLower())
+        {
+            case "spawn":
+                ShopPrefabs.SpawnShopPrefab(raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
+                Misc.Msg("Spawning Shop");
+                break;
+
+            default:
+                break;
+        }
     }
 }
