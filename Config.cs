@@ -1,4 +1,5 @@
 using RedLoader;
+using SonsSdk;
 
 namespace IngameShop;
 
@@ -9,6 +10,9 @@ public static class Config
     public static ConfigEntry<bool> DebugLoggingIngameShop { get; private set; }
     public static ConfigEntry<bool> NetworkDebugIngameShop { get; private set; }
     public static ConfigEntry<int> MaxShops { get; private set; }
+
+    public static KeybindConfigEntry Cmd1 { get; private set; }
+    public static ConfigEntry<bool> Cmd1Disable { get; private set; }
     internal static void Init()
     {
         IngameShopCategory = ConfigSystem.CreateCategory("ingameShop", "IngameShop");
@@ -30,6 +34,25 @@ public static class Config
             true,
             "Enable Extra Network Debug Logs",
             "Enables Extra Network Debug Logs of the game to the console.");
+
+        Cmd1Disable = IngameShopCategory.CreateEntry(
+            "enable_logging_advanced_ui",
+            false,
+            "Enables Ui Testing Kit",
+            "Enables Ui Testing Kit");
+
+        Cmd1 = IngameShopCategory.CreateKeybindEntry(
+                  "command_1",
+                  "numpad0",
+                  "Command1",
+                  "Command 1");
+        Cmd1.Notify(() =>
+        {
+            if (Config.Cmd1Disable.Value)
+            {
+                IngameShopUi.UITesting();
+            }
+        });
     }
 
     // Same as the callback in "CreateSettings". Called when the settings ui is closed.

@@ -13,7 +13,7 @@ public class IngameShop : SonsMod
     {
 
         // Uncomment any of these if you need a method to run on a specific update loop.
-        //OnUpdateCallback = MyUpdateMethod;
+        //OnUpdateCallback = Update;
         //OnLateUpdateCallback = MyLateUpdateMethod;
         //OnFixedUpdateCallback = MyFixedUpdateMethod;
         //OnGUICallback = MyGUIMethod;

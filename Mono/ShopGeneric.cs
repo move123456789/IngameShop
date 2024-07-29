@@ -1,4 +1,5 @@
 ﻿using RedLoader;
+using Sons.Gui;
 using Sons.Gui.Input;
 using TheForest.Items.Special;
 using TheForest.Utils;
@@ -92,6 +93,9 @@ namespace IngameShop.Mono
                             else
                             {
                                 IngameShopUi.OpenPanel("ShopAdminUi");
+                                IngameShopUi.inventory = inventory;
+                                IngameShopUi.UpdateItemsUI();
+                                PauseMenu.SetActive(true);
                             }
                         }
                         //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
@@ -111,4 +115,4 @@ namespace IngameShop.Mono
             }
         }
     }
-}
+
