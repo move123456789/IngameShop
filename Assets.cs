@@ -10,10 +10,10 @@ namespace IngameShop
         [AssetReference("Shop")]
         public static GameObject Shop { get; set; }
 
-        [AssetReference("Insert")]
+        [AssetReference("InsertWhite")]
         public static Texture2D InsertIcon { get; set; }
 
-        [AssetReference("Take")]
+        [AssetReference("TakeWhite")]
         public static Texture2D TakeIcon { get; set; }
     }
 }

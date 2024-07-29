@@ -1,5 +1,6 @@
 ﻿using RedLoader;
 using Sons.Gui.Input;
+using TheForest.Items.Special;
 using TheForest.Utils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,13 +71,36 @@ namespace IngameShop.Mono
                 {
                     if (add.IsActive)
                     {
-                        if (!LocalPlayer.Inventory.IsLeftHandEmpty())
+                        IHeldOnlyItemController heldController = LocalPlayer.Inventory.HeldOnlyItemController;
+                        if (heldController != null)
                         {
-                            Misc.Msg($"Left Hand Holding: Name: {LocalPlayer.Inventory.LeftHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.LeftHandItem._itemID}");
+                            if (heldController.Amount > 0)
+                            {
+                                if (heldController.Amount == 1)
+                                {
+                                    heldController.PutDown(false, false, false);
+                                    int item = heldController.HeldItem._itemID;
+                                    inventory.AddItem(item, 1);
+                                }
+                                else
+                                {
+                                    int item = heldController.HeldItem._itemID;
+                                    heldController.PutDown(false, false, false);
+                                    inventory.AddItem(item, heldController.Amount);
+                                }
+                            }
+                            else
+                            {
+                                IngameShopUi.OpenPanel("ShopAdminUi");
+                            }
                         }
-                        if (!LocalPlayer.Inventory.IsRightHandEmpty())
-                        {
-                            Misc.Msg($"Right Hand Holding: Name: {LocalPlayer.Inventory.RightHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.RightHandItem._itemID}");
+                        //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
+                        //{
+                        //    Misc.Msg($"Left Hand Holding: Name: {LocalPlayer.Inventory.LeftHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.LeftHandItem._itemID}");
+                        //}
+                        //if (!LocalPlayer.Inventory.IsRightHandEmpty())
+                        //{
+                        //    Misc.Msg($"Right Hand Holding: Name: {LocalPlayer.Inventory.RightHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.RightHandItem._itemID}");
                         }
                     }
                     else if (remove.IsActive)
