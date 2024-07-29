@@ -18,6 +18,7 @@ public static class Config
             2,
             "Max Shops Player Can Have (Host Only)",
             "Max Amount Of Shops A Player Can Have, Can Only Be Adjusted By Host");
+        MaxShops.SetRange(0, 10);
 
         DebugLoggingIngameShop = IngameShopCategory.CreateEntry(
             "enable_logging_advanced_ingameshop",

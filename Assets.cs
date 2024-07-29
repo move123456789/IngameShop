@@ -9,5 +9,11 @@ namespace IngameShop
     {
         [AssetReference("Shop")]
         public static GameObject Shop { get; set; }
+
+        [AssetReference("Insert")]
+        public static Texture2D InsertIcon { get; set; }
+
+        [AssetReference("Take")]
+        public static Texture2D TakeIcon { get; set; }
     }
 }

@@ -56,6 +56,14 @@ public class IngameShop : SonsMod
         // Unregistering Network Events
         Network.Manager.UnregisterEvents();
 
+        foreach (GameObject gameObject in ShopPrefabs.spawnedShops.Values)
+        {
+            GameObject.Destroy(gameObject);
+        }
+        ShopPrefabs.spawnedShops.Clear();
+        GameObject.Destroy(ShopPrefabs.shop);
+        ShopPrefabs.myShopAmount = 0;
+
     }
 
     [DebugCommand("shop")]
