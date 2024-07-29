@@ -3,6 +3,7 @@ namespace IngameShop;
 using Sons.Items.Core;
 using SonsSdk;
 using SUI;
+using TheForest.Items.Special;
 using TheForest.Utils;
 using TMPro;
 using UnityEngine;
@@ -231,6 +232,61 @@ public class IngameShopUi
     internal static bool IsPanelActive()
     {
         return GetPanel("ShopAdminUi").Root.activeSelf;
+    }
+    internal static void OnKeyClick()
+    {
+        Transform transform = LocalPlayer._instance._mainCam.transform;
+        RaycastHit raycastHit;
+        Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+        {
+                "Default"
+        }));
+        if (shouldRunAdminUi)
+        {
+            //if (Vector3.Distance(LocalPlayer.Transform.position, Shop.transform.position) > 10) { return; }
+            //if (Input.GetKeyDown(KeyCode.E))
+            if (add.IsActive)
+            {
+                IHeldOnlyItemController heldController = LocalPlayer.Inventory.HeldOnlyItemController;
+                if (heldController != null)
+                {
+                    if (heldController.Amount > 0)
+                    {
+                        if (heldController.Amount == 1)
+                        {
+                            heldController.PutDown(false, false, false);
+                            int item = heldController.HeldItem._itemID;
+                            inventory.AddItem(item, 1);
+                        }
+                        else
+                        {
+                            int item = heldController.HeldItem._itemID;
+                            heldController.PutDown(false, false, false);
+                            inventory.AddItem(item, heldController.Amount);
+                        }
+                    }
+                    else
+                    {
+                        IngameShopUi.OpenPanel("ShopAdminUi");
+                        //IngameShopUi.inventory = inventory;
+                        IngameShopUi.UpdateItemsUI();
+
+                    }
+                }
+                //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
+                //{
+                //    Misc.Msg($"Left Hand Holding: Name: {LocalPlayer.Inventory.LeftHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.LeftHandItem._itemID}");
+                //}
+                //if (!LocalPlayer.Inventory.IsRightHandEmpty())
+                //{
+                //    Misc.Msg($"Right Hand Holding: Name: {LocalPlayer.Inventory.RightHandItem.Data.Name} ItemId: {LocalPlayer.Inventory.RightHandItem._itemID}");
+            }
+
+            else if (remove.IsActive)
+            {
+
+            }
+        }
     }
 
     internal static async Task SendUiMessage(SUiElement<SLabelOptions> sLabel, string message)

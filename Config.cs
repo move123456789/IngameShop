@@ -7,10 +7,10 @@ public static class Config
 {
     internal static ConfigCategory IngameShopCategory { get; private set; }
 
+    public static KeybindConfigEntry ToggleMenuKey { get; private set; }
+    public static ConfigEntry<int> MaxShops { get; private set; }
     public static ConfigEntry<bool> DebugLoggingIngameShop { get; private set; }
     public static ConfigEntry<bool> NetworkDebugIngameShop { get; private set; }
-    public static ConfigEntry<int> MaxShops { get; private set; }
-
     public static KeybindConfigEntry Cmd1 { get; private set; }
     public static ConfigEntry<bool> Cmd1Disable { get; private set; }
     internal static void Init()
@@ -23,6 +23,17 @@ public static class Config
             "Max Shops Player Can Have (Host Only)",
             "Max Amount Of Shops A Player Can Have, Can Only Be Adjusted By Host");
         MaxShops.SetRange(0, 10);
+
+        ToggleMenuKey = IngameShopCategory.CreateKeybindEntry(
+            "menu_key",
+            "e",
+            "Toggle Menu Key",
+            "The key that toggles the Menu (DEFAULT E).");
+        ToggleMenuKey.DefaultValue = "e";
+        ToggleMenuKey.Notify(() =>
+        {
+            IngameShopUi.OnKeyClick();
+        });
 
         DebugLoggingIngameShop = IngameShopCategory.CreateEntry(
             "enable_logging_advanced_ingameshop",

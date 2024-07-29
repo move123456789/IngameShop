@@ -5,6 +5,7 @@ using TheForest.Items.Special;
 using TheForest.Utils;
 using UnityEngine;
 using UnityEngine.UI;
+using SonsSdk;
 
 namespace IngameShop.Mono
 {
@@ -95,7 +96,7 @@ namespace IngameShop.Mono
                                 IngameShopUi.OpenPanel("ShopAdminUi");
                                 IngameShopUi.inventory = inventory;
                                 IngameShopUi.UpdateItemsUI();
-                                PauseMenu.SetActive(true);
+
                             }
                         }
                         //if (!LocalPlayer.Inventory.IsLeftHandEmpty())
