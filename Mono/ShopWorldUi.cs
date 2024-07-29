@@ -1,5 +1,7 @@
-﻿using RedLoader;
+﻿using Bolt;
+using RedLoader;
 using Sons.Items.Core;
+using SonsSdk;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,14 +35,27 @@ namespace IngameShop.Mono
 
         private void AddPreviewItem(int itemId, int posistion)
         {
+            Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Start, ItemId: {itemId}, ListPosition: {posistion}");
             var previewItemSlots = new[] { previewItem, null, null, null, null };
+            if (previewItemSlots[posistion] == null) { Misc.Msg("[ShopWorldUi] [AddPreviewItem] previewItemSlots[posistion] == null Returning");  return; }
             GameObject addedPreview = previewItemSlots[posistion].transform.FindChild($"{itemId}").gameObject;
             GameObject addedPreviewByChildNumber = previewItemSlots[posistion].transform.GetChild(0).gameObject;
-            if (addedPreview != null) { Misc.Msg("Item Already Added"); return; }
-            else if (addedPreview == null && addedPreviewByChildNumber != null) { GameObject.Destroy(addedPreviewByChildNumber); }
+            if (addedPreview != null) { Misc.Msg("[ShopWorldUi] [AddPreviewItem] Item Already Added"); return; }
             else
             {
+                if (addedPreviewByChildNumber != null) { GameObject.Destroy(addedPreviewByChildNumber); }
 
+                GameObject toBePreviewItem = ItemDatabaseManager.ItemById(itemId).PickupPrefab.gameObject;
+                if (toBePreviewItem != null)
+                {
+                    Misc.Msg("[ShopWorldUi] [AddPreviewItem] Adding Preview Item");
+                    previewItemSlots[posistion].AddGo($"{itemId}");
+                    GameObject toBeAddedTo = previewItemSlots[posistion].transform.FindChild($"{itemId}").gameObject;
+                    if (toBeAddedTo == null) { Misc.Msg("Something went worng in gettig gameobject to place preview prefab on"); return; }
+                    GameObject spawnedItem = GameObject.Instantiate(toBePreviewItem, toBeAddedTo.transform);
+                    spawnedItem.SetActive(true);
+                    spawnedItem.SetParent(toBeAddedTo.transform);
+                } else { Misc.Msg("[ShopWorldUi] [AddPreviewItem] toBePreviewItem is NULL"); }
             }
         }
 
@@ -71,7 +86,7 @@ namespace IngameShop.Mono
                     else
                     {
                         itemPrice[index].text = $"Price: 1x {name}";
-                        AddPreviewItem(priceItemId, index);
+                        AddPreviewItem(itemId, index);
                     }
                 } else { itemPrice[index].text = $"Price: 1x STICK (Defauly)"; }
                 

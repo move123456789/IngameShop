@@ -1,4 +1,5 @@
-﻿using Sons.Prefabs;
+﻿using Sons.Items.Core;
+using Sons.Prefabs;
 using SonsSdk;
 using SonsSdk.Attributes;
 using SUI;
@@ -82,9 +83,62 @@ public class IngameShop : SonsMod
                 ShopPrefabs.SpawnShopPrefab(raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
                 Misc.Msg("Spawning Shop");
                 break;
-
+            case "s":
+                ItemTesting(392, raycastHit, "held");
+                break;
+            case "s1":
+                ItemTesting(78, raycastHit, "held");
+                break;
             default:
                 break;
         }
+    }
+
+    private void ItemTesting(int itemId, RaycastHit hit, string prefab)
+    {
+        Misc.Msg($"Spawning Object: {itemId}");
+        string prefabName = prefab.ToLower();
+        GameObject toBePreviewItem;
+        if ( prefabName == "pickup")
+        {
+            toBePreviewItem = ItemDatabaseManager.ItemById(itemId).PickupPrefab.gameObject;
+        } else if ( prefabName == "held")
+        {
+            toBePreviewItem = ItemDatabaseManager.ItemById(itemId).HeldPrefab.gameObject;
+        } else if ( prefabName == "prop")
+        {
+            toBePreviewItem = ItemDatabaseManager.ItemById(itemId).PropPrefab.gameObject;
+        }
+        else { return; }
+        
+        if (toBePreviewItem != null)
+        {
+            Misc.Msg("[ShopWorldUi] [AddPreviewItem] Adding Preview Item");
+            GameObject mjau = new GameObject("TestGameObject");
+
+            mjau.transform.position = hit.point + Vector3.up * 0.1f;
+            mjau.transform.rotation = LocalPlayer.Transform.rotation;
+
+            mjau.AddGo($"{itemId}");
+
+            GameObject toBeAddedTo = mjau.transform.FindChild($"{itemId}").gameObject;
+
+            if (toBeAddedTo == null) { Misc.Msg("Something went worng in gettig gameobject to place preview prefab on"); return; }
+
+            GameObject spawnedItem = GameObject.Instantiate(toBePreviewItem, toBeAddedTo.transform);
+
+            Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<Component> list  = spawnedItem.GetComponents<Component>();
+            for (int i = 0; i < list.Length; i++)
+            {
+                Component item = list[i];
+                if (item.GetType() != typeof(Transform))
+                {
+                    GameObject.Destroy(item);
+                }
+            }
+
+            spawnedItem.SetActive(true);
+        }
+        else { Misc.Msg("[ShopWorldUi] [AddPreviewItem] toBePreviewItem is NULL"); }
     }
 }
