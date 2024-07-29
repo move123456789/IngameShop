@@ -8,6 +8,7 @@ namespace IngameShop
     {
         public static GameObject shop;
         public static Dictionary<string, GameObject> spawnedShops = new Dictionary<string, GameObject>();
+        public static int myShopAmount = 0;
 
         public static void SetupShopPrefab()
         {
@@ -25,6 +26,7 @@ namespace IngameShop
             if (shop != null)
             {
                 if (!isOwner) { Misc.Msg("[SpawnShopPrefab] Spawning Shop From Network"); }
+                else { if (Network.Manager.MaxShopsAllowed != null) { if (myShopAmount >= Network.Manager.MaxShopsAllowed) { Misc.Msg("Maximum Amount Of Shops Create, Contact Server Owner/Host To Adjust Limit"); return null; } } }
                 GameObject shopCopy = GameObject.Instantiate(shop);
                 if (Config.NetworkDebugIngameShop.Value) { if (shopCopy == null) { Misc.Msg("[SpawnShopPrefab] shopCopy == null!"); } }
                 shopCopy.transform.position = position;
@@ -58,6 +60,7 @@ namespace IngameShop
                         else { shopGeneric.SteamId = uSteamId; }
                         
                     }
+                    myShopAmount += 1;
 
                 }
                 else if (!isOwner && shopGeneric != null)

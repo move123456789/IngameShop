@@ -11,7 +11,8 @@ namespace IngameShop.Network
             {
                 Misc.Msg("Registerd Events");
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SpawnShop>();
-
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.ShopSettings>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.JoinedServer>();
             }
         }
         public static void UnregisterEvents()
@@ -21,7 +22,25 @@ namespace IngameShop.Network
             {
                 Misc.Msg("Unregisterd Events");
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.SpawnShop>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.ShopSettings>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.JoinedServer>();
             }
         }
+
+        public static void SendJoinedServerEvent()
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient)
+            {
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.JoinedServer
+                {
+                    SenderName = Misc.GetLocalPlayerUsername(),
+                    SenderId = stringSteamId,
+
+                });
+            }
+        }
+
+        public static int? MaxShopsAllowed = null;
     }
 }

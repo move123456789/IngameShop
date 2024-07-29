@@ -8,9 +8,16 @@ public static class Config
 
     public static ConfigEntry<bool> DebugLoggingIngameShop { get; private set; }
     public static ConfigEntry<bool> NetworkDebugIngameShop { get; private set; }
+    public static ConfigEntry<int> MaxShops { get; private set; }
     internal static void Init()
     {
         IngameShopCategory = ConfigSystem.CreateCategory("ingameShop", "IngameShop");
+
+        MaxShops = IngameShopCategory.CreateEntry(
+            "max_shop_ingameshop",
+            2,
+            "Max Shops Player Can Have (Host Only)",
+            "Max Amount Of Shops A Player Can Have, Can Only Be Adjusted By Host");
 
         DebugLoggingIngameShop = IngameShopCategory.CreateEntry(
             "enable_logging_advanced_ingameshop",
