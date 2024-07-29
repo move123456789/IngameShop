@@ -33,29 +33,144 @@ namespace IngameShop.Mono
             
         }
 
-        private void AddPreviewItem(int itemId, int posistion)
+        private void AddPreviewItem(int itemId, int position)
         {
-            Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Start, ItemId: {itemId}, ListPosition: {posistion}");
-            var previewItemSlots = new[] { previewItem, null, null, null, null };
-            if (previewItemSlots[posistion] == null) { Misc.Msg("[ShopWorldUi] [AddPreviewItem] previewItemSlots[posistion] == null Returning");  return; }
-            GameObject addedPreview = previewItemSlots[posistion].transform.FindChild($"{itemId}").gameObject;
-            GameObject addedPreviewByChildNumber = previewItemSlots[posistion].transform.GetChild(0).gameObject;
-            if (addedPreview != null) { Misc.Msg("[ShopWorldUi] [AddPreviewItem] Item Already Added"); return; }
+            Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Start, ItemId: {itemId}, ListPosition: {position}");
+
+            // Ensure the previewItemSlots array is properly initialized
+            var previewItemSlots = new GameObject[] { previewItem, null, null, null, null };
+            if (previewItemSlots[position] == null)
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] previewItemSlots[position] == null Returning");
+                return;
+            }
+
+            // Ensure that the GameObject and its Transform components exist
+            Transform slotTransform = previewItemSlots[position].transform;
+            if (slotTransform == null)
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] slotTransform is NULL Returning");
+                return;
+            }
+
+            // Check if the item is already added
+            Transform addedPreviewTransform = slotTransform.Find($"{itemId}");
+            if (addedPreviewTransform != null)
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] Item Already Added");
+                return;
+            }
+
+            // Ensure that if there's an existing child, it gets destroyed
+            if (slotTransform.childCount > 0)
+            {
+                GameObject addedPreviewByChildNumber = slotTransform.GetChild(0).gameObject;
+                if (addedPreviewByChildNumber != null)
+                {
+                    GameObject.Destroy(addedPreviewByChildNumber);
+                }
+            }
+
+            // Retrieve the item from the database and check for nulls
+            var itemData = ItemDatabaseManager.ItemById(itemId);
+            if (itemData == null)
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] ItemData is NULL");
+                return;
+            }
+            bool heldOrPickupPrefab;
+            if (itemId == 640 || itemId == 78)
+            {
+                if (itemData.PickupPrefab == null)
+                {
+                    Misc.Msg("[ShopWorldUi] [AddPreviewItem] PickupPrefab is NULL");
+                    return;
+                }
+                heldOrPickupPrefab = false;  // False For Pickup
+            }
             else
             {
-                if (addedPreviewByChildNumber != null) { GameObject.Destroy(addedPreviewByChildNumber); }
-
-                GameObject toBePreviewItem = ItemDatabaseManager.ItemById(itemId).PickupPrefab.gameObject;
-                if (toBePreviewItem != null)
+                if (itemData.HeldPrefab == null)
                 {
-                    Misc.Msg("[ShopWorldUi] [AddPreviewItem] Adding Preview Item");
-                    previewItemSlots[posistion].AddGo($"{itemId}");
-                    GameObject toBeAddedTo = previewItemSlots[posistion].transform.FindChild($"{itemId}").gameObject;
-                    if (toBeAddedTo == null) { Misc.Msg("Something went worng in gettig gameobject to place preview prefab on"); return; }
-                    GameObject spawnedItem = GameObject.Instantiate(toBePreviewItem, toBeAddedTo.transform);
-                    spawnedItem.SetActive(true);
-                    spawnedItem.SetParent(toBeAddedTo.transform);
-                } else { Misc.Msg("[ShopWorldUi] [AddPreviewItem] toBePreviewItem is NULL"); }
+                    Misc.Msg("[ShopWorldUi] [AddPreviewItem] HeldPrefab is NULL");
+                    return;
+                }
+                heldOrPickupPrefab = true;  // True For HeldPrefab
+            }
+
+            GameObject toBePreviewItem;
+            if (!heldOrPickupPrefab)
+            {
+                toBePreviewItem = itemData.HeldPrefab.gameObject;
+            }
+            else
+            {
+                toBePreviewItem = itemData.PickupPrefab.gameObject;
+            }
+            if (toBePreviewItem != null)
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] Adding Preview Item");
+                // Assuming AddGo is a method that adds the GameObject to the slot
+                previewItemSlots[position].AddGo($"{itemId}");
+
+                // Recheck if the item was added properly
+                Transform toBeAddedToTransform = slotTransform.Find($"{itemId}");
+                if (toBeAddedToTransform == null)
+                {
+                    Misc.Msg("[ShopWorldUi] [AddPreviewItem] Something went wrong in getting GameObject to place preview prefab on");
+                    return;
+                }
+
+                // Instantiate the preview item
+                GameObject spawnedItem = GameObject.Instantiate(toBePreviewItem, toBeAddedToTransform);
+                spawnedItem.SetActive(true);
+
+                Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<Component> list = spawnedItem.GetComponents<Component>();
+                for (int i = 0; i < list.Length; i++)
+                {
+                    Component item = list[i];
+                    if (item.GetType() != typeof(Transform))
+                    {
+                        GameObject.Destroy(item);
+                    }
+                }
+
+                if (!heldOrPickupPrefab)
+                {
+                    spawnedItem.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                    GameObject pickupGui = spawnedItem.transform.FindChild("_PickupGui").gameObject;
+                    pickupGui.SetActive(false);
+                    
+                    GameObject grassPusher = spawnedItem.transform.FindChild("GrassPusherPiv").gameObject;
+                    grassPusher.SetActive(false);
+
+                    GameObject trigger = spawnedItem.transform.FindChild("Trigger").gameObject;
+                    trigger.SetActive(false);
+
+                    GameObject dragLocation = spawnedItem.transform.FindChild("DragLocation").gameObject;
+                    dragLocation.SetActive(false);
+
+                    GameObject grabPosition = spawnedItem.transform.FindChild("GrabPosition").gameObject;
+                    grabPosition.SetActive(false);
+
+                    GameObject vailPickupTransform = spawnedItem.transform.FindChild("VailPickupTransform").gameObject;
+                    vailPickupTransform.SetActive(false);
+
+                    GameObject meleeCollider = spawnedItem.transform.FindChild("MeleeCollider").gameObject;
+                    meleeCollider.SetActive(false);
+
+                    GameObject waterSensor = spawnedItem.transform.FindChild("WaterSensor").gameObject;
+                    waterSensor.SetActive(false);
+
+                }
+                else
+                {
+                    spawnedItem.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+                }
+            }
+            else
+            {
+                Misc.Msg("[ShopWorldUi] [AddPreviewItem] toBePreviewItem is NULL");
             }
         }
 
