@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Globalization;
+using UnityEngine;
 
 namespace IngameShop.Network
 {
@@ -6,36 +7,44 @@ namespace IngameShop.Network
     {
         public static string Vector3ToString(Vector3 vector)
         {
-            return $"{vector.x},{vector.y},{vector.z}";
+            return $"{vector.x.ToString(CultureInfo.InvariantCulture)},{vector.y.ToString(CultureInfo.InvariantCulture)},{vector.z.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public static Vector3 Vector3FromString(string vectorString)
         {
             string[] parts = vectorString.Split(',');
-            if (parts.Length != 3) throw new System.FormatException("String is not a valid Vector3 format");
+            if (parts.Length != 3)
+            {
+                Misc.Msg("String is not a valid Vector3 format");
+                return new Vector3(0, 0, 0);
+            }
 
             return new Vector3(
-                float.Parse(parts[0]),
-                float.Parse(parts[1]),
-                float.Parse(parts[2])
+                float.Parse(parts[0], CultureInfo.InvariantCulture),
+                float.Parse(parts[1], CultureInfo.InvariantCulture),
+                float.Parse(parts[2], CultureInfo.InvariantCulture)
             );
         }
 
         public static string QuaternionToString(Quaternion quaternion)
         {
-            return $"{quaternion.x},{quaternion.y},{quaternion.z},{quaternion.w}";
+            return $"{quaternion.x.ToString(CultureInfo.InvariantCulture)},{quaternion.y.ToString(CultureInfo.InvariantCulture)},{quaternion.z.ToString(CultureInfo.InvariantCulture)},{quaternion.w.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public static Quaternion QuaternionFromString(string quaternionString)
         {
             string[] parts = quaternionString.Split(',');
-            if (parts.Length != 4) throw new System.FormatException("String is not a valid Quaternion format");
+            if (parts.Length != 4)
+            {
+                Misc.Msg("String is not a valid Quaternion format");
+                return new Quaternion(0, 0, 0, 0);
+            }
 
             return new Quaternion(
-                float.Parse(parts[0]),
-                float.Parse(parts[1]),
-                float.Parse(parts[2]),
-                float.Parse(parts[3])
+                float.Parse(parts[0], CultureInfo.InvariantCulture),
+                float.Parse(parts[1], CultureInfo.InvariantCulture),
+                float.Parse(parts[2], CultureInfo.InvariantCulture),
+                float.Parse(parts[3], CultureInfo.InvariantCulture)
             );
         }
     }

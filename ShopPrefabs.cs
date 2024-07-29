@@ -24,9 +24,12 @@ namespace IngameShop
         {
             if (shop != null)
             {
+                if (!isOwner) { Misc.Msg("[SpawnShopPrefab] Spawning Shop From Network"); }
                 GameObject shopCopy = GameObject.Instantiate(shop);
+                if (Config.NetworkDebugIngameShop.Value) { if (shopCopy == null) { Misc.Msg("[SpawnShopPrefab] shopCopy == null!"); } }
                 shopCopy.transform.position = position;
                 shopCopy.transform.rotation = rotation;
+                if (Config.NetworkDebugIngameShop.Value) { Misc.Msg($"[SpawnShopPrefab] Moved Prefab To Pos: {position}, Rot: {rotation}"); }
                 Mono.ShopGeneric shopGeneric = shopCopy.GetComponent<Mono.ShopGeneric>();
                 if (isOwner && shopGeneric != null)
                 {
@@ -46,13 +49,13 @@ namespace IngameShop
                     }
                     else
                     {
-                        ulong? mySteamId = MultiplayerUtilities.GetSteamId(LocalPlayer.Entity);
-                        if (mySteamId == 0 || mySteamId == null)
+                        (ulong uSteamId, string sSteamId) = Misc.MySteamId();
+                        if (string.IsNullOrEmpty(sSteamId))
                         {
                             shopGeneric.SteamId = 100;
-                            Misc.Msg("Error Getting mySteamId from LocalPlayer");
+                            Misc.Msg("[SpawnShopPrefab] Error Getting mySteamId from LocalPlayer");
                         }
-                        else { shopGeneric.SteamId = mySteamId; }
+                        else { shopGeneric.SteamId = uSteamId; }
                         
                     }
 
@@ -69,7 +72,7 @@ namespace IngameShop
                 }
                 if (spawnedShops.ContainsKey(shopGeneric.UniqueId))
                 {
-                    Misc.Msg("List Already Contains Unique Id Destroying Object");
+                    Misc.Msg("[SpawnShopPrefab] List Already Contains Unique Id Destroying Object");
                     GameObject.Destroy(shopCopy); shopCopy = null;
                 }
                 else
@@ -77,11 +80,14 @@ namespace IngameShop
                     spawnedShops.Add(shopGeneric.UniqueId, shopCopy);
                 }
                 
-
+                if (Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer || Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient)
+                {
+                    shopCopy.AddComponent<Mono.NetworkManager>();
+                }
 
                 return shopCopy;
             }
-            else { Misc.Msg("Cant Spawn Shop Prefab, Shop is null!"); return null; }
+            else { Misc.Msg("[SpawnShopPrefab] Cant Spawn Shop Prefab, Shop is null!"); return null; }
         }
     }
 }

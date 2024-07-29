@@ -53,6 +53,9 @@ public class IngameShop : SonsMod
         Misc.OnHostModeGotten -= Misc.OnHostModeGottenCorrectly;
         Misc.dialogManager.QuitGameConfirmDialog.remove_OnOption1Clicked((Il2CppSystem.Action)OnLeaveWorld);
 
+        // Unregistering Network Events
+        Network.Manager.UnregisterEvents();
+
     }
 
     [DebugCommand("shop")]

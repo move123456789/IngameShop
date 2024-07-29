@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using Bolt;
 using Scene = UnityEngine.SceneManagement.Scene;
+using Steamworks;
+using Sons.Multiplayer;
 
 namespace IngameShop
 {
@@ -90,6 +92,7 @@ namespace IngameShop
             }
             AddOnQuitWorld();
             ShopPrefabs.SetupShopPrefab();
+            Network.Manager.RegisterEvents();
         }
 
         public static GameObject FindObjectInSpecificScene(string sceneName = "SonsMain", string objectName = "ModalDialogManager") // ModalDialogManager as Standard
@@ -121,7 +124,7 @@ namespace IngameShop
             return null;
         }
 
-        internal static string GetLocalPlayerUsername()
+        public static string GetLocalPlayerUsername()
         {
             if (Misc.GetHostMode() == SimpleSaveGameType.SinglePlayer) { return "SmokyAce"; }
             if (LocalPlayer.Entity.Entity.NetworkId == new NetworkId(0)) { Misc.Msg("Error GetLocalPlayerUsername"); return null; }
@@ -133,6 +136,26 @@ namespace IngameShop
                 return username;
             }
             return null;
+        }
+
+        public static (ulong, string) MySteamId()
+        {
+            ulong? mySteamId = MultiplayerUtilities.GetSteamId(LocalPlayer.Entity);
+            if (mySteamId == null || mySteamId == 0)
+            {
+                Steamworks.CSteamID SteamID = SteamUser.GetSteamID();
+                string SteamIDString = SteamID.ToString();
+                ulong resultSteamID;
+                if (ulong.TryParse(SteamIDString, out resultSteamID))
+                {
+                    return (resultSteamID, SteamIDString);
+                }
+                else { Misc.Msg("[MySteamId()] Failed To Get MySteamId! Returned null"); return (0, null); }
+            }
+            else
+            {
+                return ((ulong)mySteamId, mySteamId.ToString());
+            }
         }
     }
 
