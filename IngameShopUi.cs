@@ -1,6 +1,7 @@
 namespace IngameShop;
 
 using Sons.Gui;
+using Sons.Items;
 using Sons.Items.Core;
 using SonsSdk;
 using SUI;
@@ -58,6 +59,7 @@ public class IngameShopUi
     internal static SUiElement<SLabelOptions> Item3ItemQuantity;
     internal static SUiElement<SLabelOptions> Item4ItemQuantity;
     internal static SUiElement<SLabelOptions> Item5ItemQuantity;
+    internal static SUiElement<SLabelOptions> InfoMessage;
     internal static SUiElement<SContainerOptions>[] ReciveItemArray = new SUiElement<SContainerOptions>[] { Item1Recive, Item2Recive, Item3Recive, Item4Recive, Item5Recive };
     internal static SUiElement<SLabelOptions>[] ReciveItemNameArray = new SUiElement<SLabelOptions>[] { Item1ItemName, Item2ItemName, Item3ItemName, Item4ItemName, Item5ItemName };
     internal static SUiElement<SLabelOptions>[] ReciveItemIDArray = new SUiElement<SLabelOptions>[] { Item1ItemID, Item2ItemID, Item3ItemID, Item4ItemID, Item5ItemID };
@@ -264,6 +266,7 @@ public class IngameShopUi
         });
         AddItemButton.SetParent(AddItemContainer);
 
+        // ShopBougthUi // ShopBougthUi // ShopBougthUi // ShopBougthUi //
         var recivePanel = RegisterNewPanel("ShopBougthUi")
            .Dock(EDockType.Fill).OverrideSorting(100);
 
@@ -290,13 +293,13 @@ public class IngameShopUi
             .FontSpacing(10);
         title1.SetParent(recivePanel);
 
-        var message1 = SLabel.Text("[INFO MESSAGE]")
+        InfoMessage = SLabel.Text("[INFO MESSAGE]")
             .FontColor("#444").Font(EFont.RobotoRegular)
             .PHeight(100).FontSize(32)
             .Anchor(AnchorType.TopCenter)
             .Position(null, -300)
             .FontSpacing(10);
-        message1.SetParent(recivePanel);
+        InfoMessage.SetParent(recivePanel);
 
         // Item 1
         Item1Recive = SContainer
@@ -321,7 +324,7 @@ public class IngameShopUi
         var Item1ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1ToInventory.OnClick(() =>
         {
-            //RemoveItemFromUi(Item1);
+            TakeItemFromPurchasedItemsDict(index: 0, itemIdText: Item1ItemID);
         });
         Item1ToInventory.SetParent(Item1Recive);
 
@@ -348,7 +351,7 @@ public class IngameShopUi
         var Item2ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2ToInventory.OnClick(() =>
         {
-            //RemoveItemFromUi(Item2);
+            TakeItemFromPurchasedItemsDict(index: 1, itemIdText: Item2ItemID);
         });
         Item2ToInventory.SetParent(Item2Recive);
 
@@ -375,7 +378,7 @@ public class IngameShopUi
         var Item3ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3ToInventory.OnClick(() =>
         {
-            //RemoveItemFromUi(Item3);
+            TakeItemFromPurchasedItemsDict(index: 2, itemIdText: Item3ItemID);
         });
         Item3ToInventory.SetParent(Item3Recive);
 
@@ -402,7 +405,7 @@ public class IngameShopUi
         var Item4ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4ToInventory.OnClick(() =>
         {
-            //RemoveItemFromUi(Item4);
+            TakeItemFromPurchasedItemsDict(index: 3, itemIdText: Item4ItemID);
         });
         Item4ToInventory.SetParent(Item4Recive);
 
@@ -429,7 +432,7 @@ public class IngameShopUi
         var Item5ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5ToInventory.OnClick(() =>
         {
-            //RemoveItemFromUi(Item5);
+            TakeItemFromPurchasedItemsDict(index: 4, itemIdText: Item5ItemID);
         });
         Item5ToInventory.SetParent(Item5Recive);
     }
@@ -513,9 +516,9 @@ public class IngameShopUi
                             }
                             else
                             {
+                                IngameShopUi.OpenPanel("ShopAdminUi");
                                 if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
                                 {
-                                    IngameShopUi.OpenPanel("ShopAdminUi");
                                     PauseMenu._instance.Open();
                                 }
                                 IngameShopUi.inventory = shopInventory;
@@ -527,11 +530,13 @@ public class IngameShopUi
 
                     else if (shopGeneric.remove.IsActive)
                     {
+                        IngameShopUi.OpenPanel("ShopAdminUi");
                         if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
                         {
                             PauseMenu._instance.Open();
-                            IngameShopUi.OpenPanel("ShopAdminUi");
                         }
+                        IngameShopUi.inventory = shopInventory;
+                        IngameShopUi.UpdateTakeItemsUI();
                     }
                 }
                 Mono.ShopWorldUi shopWorldUi = shop.GetComponent<Mono.ShopWorldUi>();
@@ -730,6 +735,72 @@ public class IngameShopUi
         }
     }
 
+    public static void TakeItemFromPurchasedItemsDict(int index = -1, SUiElement<SLabelOptions> itemIdText = null)
+    {
+        if (index >= 0)
+        {
+            var itemIDElement = ReciveItemIDArray[index];
+            string itemIdString = ExtractItemId(itemIDElement.TextObject.text);
+            if (string.IsNullOrEmpty(itemIdString)) { Misc.Msg("[TakeItemFromPurchasedItemsDict] itemIDElement.TextObject.text is Bull/Empty"); return; }
+            int itemID;
+            if (int.TryParse(itemIdString, out itemID))
+            {
+                if (inventory == null) { Misc.Msg($"[TakeItemFromPurchasedItemsDict] Inventory Instance == null"); return; }
+                int hasAmount = LocalPlayer.Inventory.AmountOf(itemID);
+                int maxAmount = LocalPlayer.Inventory.GetMaxAmountOf(itemID);
+                if (hasAmount < maxAmount)
+                {
+                    LocalPlayer.Inventory.AddItem(itemID, 1);
+                    SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
+                    inventory.BuyRemoveItem(itemID, 1);
+                    UpdateTakeItemsUI();
+                    SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
+                }
+                else
+                {
+                    SonsTools.ShowMessage($"Inventory Full, Can't Add 1x {itemID}");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Inventory Full, Can't Add 1x {itemID}");
+                    SendUiMessage(InfoMessage, $"Inventory Full, Can't Add 1x {itemID}");
+                }
+            }
+            else { Misc.Msg($"[TakeItemFromPurchasedItemsDict] Failed To Parse '{itemIdString}' To Int"); return; }
+
+        }
+        else if (index == -1 && itemIdText != null)
+        {
+            string itemIdString = ExtractItemId(itemIdText.TextObject.text);
+            if (string.IsNullOrEmpty(itemIdString)) { Misc.Msg("[TakeItemFromPurchasedItemsDict] itemIDElement.TextObject.text is Bull/Empty"); return; }
+            int itemID;
+            if (int.TryParse(itemIdString, out itemID))
+            {
+                if (inventory == null) { Misc.Msg($"[TakeItemFromPurchasedItemsDict] Inventory Instance == null"); return; }
+                int hasAmount = LocalPlayer.Inventory.AmountOf(itemID);
+                int maxAmount = LocalPlayer.Inventory.GetMaxAmountOf(itemID);
+                if (hasAmount < maxAmount)
+                {
+                    LocalPlayer.Inventory.AddItem(itemID, 1);
+                    SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
+                    inventory.BuyRemoveItem(itemID, 1);
+                    UpdateTakeItemsUI();
+                    SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
+                }
+                else
+                {
+                    SonsTools.ShowMessage($"Inventory Full, Can't Add 1x {itemID}");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Inventory Full, Can't Add 1x {itemID}");
+                    SendUiMessage(InfoMessage, $"Inventory Full, Can't Add 1x {itemID}");
+                }
+            }
+            else { Misc.Msg($"[TakeItemFromPurchasedItemsDict] Failed To Parse '{itemIdString}' To Int"); return; }
+        }
+        else
+        {
+            Misc.Msg("[TakeItemFromPurchasedItemsDict] Invalid Input Cant Remove Item Via Ui");
+        }
+    }
+
     public static void UpdateItemsUI()
     {
         if (inventory != null)
@@ -760,6 +831,43 @@ public class IngameShopUi
         }
     }
 
+    public static void UpdateTakeItemsUI()
+    {
+        if (inventory != null)
+        {
+            int index = 0;
+
+            foreach (KeyValuePair<int, int> item in inventory.GetPurchasedDict())
+            {
+                if (index >= ReciveItemNameArray.Length)
+                    break;
+
+                var containerElement = ReciveItemArray[index];
+                var itemNameElement = ReciveItemNameArray[index];
+                var itemIDElement = ReciveItemIDArray[index];
+                var itemQuantityElement = ReciveItemQuantityArray[index];
+                string thisItemName = "Item Name Not Found";
+                string itemNameString = ItemDatabaseManager.ItemById(item.Key).Name;
+                if (!string.IsNullOrEmpty(itemNameString))
+                {
+                    thisItemName = itemNameString;
+                }
+                containerElement.Visible(true);
+                itemIDElement.Text($"{thisItemName}");
+                itemIDElement.Text($"ItemId: {item.Key}");
+                itemQuantityElement.Text($"Amount: {item.Value}");
+
+                index++;
+            }
+
+            // Hide any remaining UI elements
+            for (; index < ReciveItemNameArray.Length; index++)
+            {
+                ReciveItemArray[index].Visible(false);
+            }
+        }
+    }
+
     public static int? ExtractItemKey(string itemString)
     {
         // Split the string by comma to separate ItemId and Amount
@@ -783,6 +891,19 @@ public class IngameShopUi
             }
         }
         Misc.Msg("The provided string does not have the expected format.");
+        return null;
+    }
+
+    public static string ExtractItemId(string text)
+    {
+        // Split the string by the delimiter "ItemId: " and take the second part
+        string[] parts = text.Split(new[] { "ItemId: " }, StringSplitOptions.None);
+
+        if (parts.Length > 1)
+        {
+            return parts[1];
+        }
+
         return null;
     }
 

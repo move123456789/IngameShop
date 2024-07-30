@@ -235,7 +235,7 @@ namespace IngameShop.Mono
         public void UpdateUi()
         {
             if (inventory == null) { RLog.Error("[ShopWorldUi] [UpdateUi] Critical inventory = NULL!"); return; }
-            Dictionary<int, int> priceDict = inventory.GetPriceList();
+            Dictionary<int, int> priceDict = inventory.GetPriceDict();
             Dictionary<int, int> storedItems = inventory.HeldInventory;
             int index = 0;
             foreach (KeyValuePair<int, int> item in storedItems)
@@ -293,7 +293,7 @@ namespace IngameShop.Mono
         public void UpdatePriceUiOnly()
         {
             if (inventory == null) { RLog.Error("[ShopWorldUi] [UpdateUi] Critical inventory = NULL!"); return; }
-            Dictionary<int, int> priceDict = inventory.GetPriceList();
+            Dictionary<int, int> priceDict = inventory.GetPriceDict();
             int index = 0;
             foreach (KeyValuePair<int, int> item in priceDict)
             {
@@ -374,7 +374,7 @@ namespace IngameShop.Mono
         public void PurchaseItem(int index)
         {
             bool removedItem = false;
-            Dictionary<int, int> priceDict = inventory.GetPriceList();
+            Dictionary<int, int> priceDict = inventory.GetPriceDict();
             if (priceDict == null || priceDict.Keys.Count == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Price Dictonary Is Empy"); return; }
             string activeBuyItemName = previewItemSlots[index].transform.GetChild(0).gameObject.name; // Should Always Be Active Sell Item On Slot
             if (string.IsNullOrEmpty(activeBuyItemName)) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Purchase Item Not Found"); return; }

@@ -106,7 +106,8 @@ namespace IngameShop.Mono
 
         public int GetPrice(int itemId) {  return PriceDict[itemId]; }
 
-        public Dictionary<int, int> GetPriceList() { return PriceDict; }
+        public Dictionary<int, int> GetPriceDict() { return PriceDict; }
+        public Dictionary<int, int> GetPurchasedDict() { return purchashedItems; }
 
         private void UpdateUi()
         {
