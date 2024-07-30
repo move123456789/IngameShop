@@ -60,6 +60,7 @@ namespace IngameShop.Network
                 if (!ulong.TryParse(ShopOwner, out resultSteamID)) { Misc.Msg($"Failed To Parse SenderId: {Sender} To String"); return; }
                 Misc.Msg($"[SyncSingeShop] [OnReceived()] Spawn Shop To STRING Pos: {Vector3Position}, STRING Rot: {QuaternionRotation}");
                 Vector3 pos = Network.CustomSerializable.Vector3FromString(Vector3Position);
+                if (pos == Vector3.zero) { Misc.Msg("[SyncSingeShop] [OnReceived()] NetworkPos == Vector3.Zero, Aborting"); return; }
                 Quaternion rot = Network.CustomSerializable.QuaternionFromString(QuaternionRotation);
                 Misc.Msg($"[SyncSingeShop] [OnReceived()] Spawn Shop To Pos: {pos}, Rot: {rot}");
                 ShopPrefabs.SpawnShopPrefab(pos, rot, false, ShopOwnerName, resultSteamID, UniqueId);
@@ -118,6 +119,14 @@ namespace IngameShop.Network
                 if (!string.IsNullOrEmpty(toPlayerId))
                 {
                     sendToPlayerID = toPlayerId;
+                }
+                if (string.IsNullOrEmpty(shopOwnerId))
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] Owner SteamId Requried, Aborting"); return;
+                }
+                if (string.IsNullOrEmpty(shopOwnerName))
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] Owner Name Requried, Aborting"); return;
                 }
                 (ulong steamId, string stringSteamId) = Misc.MySteamId();
                 SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.SyncSingeShop

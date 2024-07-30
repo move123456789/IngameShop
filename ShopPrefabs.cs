@@ -101,6 +101,10 @@ namespace IngameShop
                 }
                 else if (!isOwner && shopGeneric != null)
                 {
+                    if (!string.IsNullOrEmpty(unqueId))
+                    {
+                        shopGeneric.UniqueId = unqueId;  // Set UniqueId if a valid one is recived from loading
+                    } else { Misc.Msg("[SpawnShopPrefab] Invalid UniqueId, Aborting"); GameObject.Destroy(shopCopy); return null; }
                     shopGeneric.SetOwner(ownerName);
                     shopGeneric.SteamId = steamId;
 

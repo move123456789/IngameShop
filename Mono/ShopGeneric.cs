@@ -163,6 +163,12 @@ namespace IngameShop.Mono
             // Check if the dot product is greater than the threshold
             return dotProduct > threshold;
         }
+
+        public string GetOwner()
+        {
+            return _owner;
+        }
+
     }
 }
 

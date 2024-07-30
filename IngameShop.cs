@@ -1,4 +1,5 @@
-﻿using Sons.Items.Core;
+﻿using IngameShop.IngameTools;
+using Sons.Items.Core;
 using Sons.Prefabs;
 using SonsSdk;
 using SonsSdk.Attributes;
@@ -88,6 +89,9 @@ public class IngameShop : SonsMod
                 break;
             case "s1":
                 ItemTesting(78, raycastHit, "held");
+                break;
+            case "sync":
+                IngameTools.TestSyncShop.SendSyncEventLookingAt();
                 break;
             default:
                 break;

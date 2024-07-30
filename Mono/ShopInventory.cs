@@ -148,5 +148,10 @@ namespace IngameShop.Mono
             }
             
         }
+
+        public (Dictionary<int, int>, Dictionary<int, int>, Dictionary<int, int>) GetAllDicts()
+        {
+            return (purchashedItems, HeldInventory, PriceDict);
+        }
     }
 }
