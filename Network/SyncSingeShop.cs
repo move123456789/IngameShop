@@ -78,4 +78,64 @@ namespace IngameShop.Network
             }
         }
     }
+    public static class SyncSingeShopEvent
+    {
+        public static void RaiseSyncSingeShopEvent(string uniqueId, Vector3? pos, Quaternion? rot, string sPos, string sRot, Dictionary<int, int> purchasedItems, Dictionary<int, int> inventoryItems, Dictionary<int, int> prices, string shopOwnerId, string shopOwnerName, string toPlayerId = null, string toPlayerName = null)
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient || Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)
+            {
+                string vector3Pos = null;
+                string rotation = null;
+                if (pos != null || pos != Vector3.zero)
+                {
+                    vector3Pos = Network.CustomSerializable.Vector3ToString((Vector3)pos);
+                }
+                if (rot != null || rot != Quaternion.identity)
+                {
+                    rotation = Network.CustomSerializable.QuaternionToString((Quaternion)rot);
+                }
+                if (string.IsNullOrEmpty(vector3Pos))
+                {
+                    if (!string.IsNullOrEmpty(sPos))
+                    {
+                        vector3Pos = sPos;
+                    } else { Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] No Valid Vector3 Pos is Given, Aborting 1:{pos}, 2:{sPos}"); return; }
+                }
+                if (string.IsNullOrEmpty(rotation))
+                {
+                    if (!string.IsNullOrEmpty(sRot))
+                    {
+                        rotation = sRot;
+                    }
+                    else { Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] No Valid Rotation is Given, Aborting 1:{rot}, 2:{sRot}"); return; }
+                }
+                string sendToPlayerName = "";
+                string sendToPlayerID = "";
+                if (!string.IsNullOrEmpty(toPlayerName))
+                {
+                    sendToPlayerName = toPlayerName;
+                }
+                if (!string.IsNullOrEmpty(toPlayerId))
+                {
+                    sendToPlayerID = toPlayerId;
+                }
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.SyncSingeShop
+                {
+                    UniqueId = uniqueId,
+                    Sender = stringSteamId,
+                    SenderName = Misc.GetLocalPlayerUsername(),
+                    Vector3Position = vector3Pos,
+                    QuaternionRotation = rotation,
+                    PurchashedItems = purchasedItems,
+                    HeldInventory = inventoryItems,
+                    Prices = prices,
+                    ShopOwner = shopOwnerId,
+                    ShopOwnerName = shopOwnerName,
+                    ToPlayerName = sendToPlayerName,
+                    ToPlayerId = sendToPlayerID,
+                });
+            }
+        }
+    }
 }
