@@ -70,12 +70,7 @@ namespace IngameShop.Network
             {
                 Mono.ShopGeneric shopGeneric = syncShop.GetComponent<Mono.ShopGeneric>();
                 if (shopGeneric == null) { Misc.Msg("[SyncSingeShop] [OnReceived()] ShopGeneric Component Not Found On Object, Aborting"); return; }
-                ulong resultSteamID;
-                if (ulong.TryParse(ShopOwner, out resultSteamID))
-                {
-                    shopGeneric.SteamId = resultSteamID;
-                }
-                shopGeneric.SetOwner(ShopOwnerName);
+                shopGeneric.UpdateShopFromNetwork(ShopOwner, ShopOwnerName, UniqueId, Vector3Position, QuaternionRotation);
                 Mono.ShopInventory shopInventory = syncShop.GetComponent<Mono.ShopInventory>();
                 if (shopInventory == null) { Misc.Msg("[SyncSingeShop] [OnReceived()] ShopInventory Component Not Found On Object, Aborting"); return; }
                 shopInventory.UpdateShopInventoryFromNetwork(PurchashedItems, HeldInventory, Prices);

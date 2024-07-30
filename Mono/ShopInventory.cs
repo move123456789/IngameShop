@@ -125,7 +125,7 @@ namespace IngameShop.Mono
 
         public void UpdateShopInventoryFromNetwork(Dictionary<int, int> purchasedItems, Dictionary<int, int> inventoryItems, Dictionary<int, int> prices)
         {
-            if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[UpdateShopInventoryFromNetwork] Updating Inventory From Network"); }
+            if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[ShopInventory] [UpdateShopInventoryFromNetwork] Updating Inventory From Network"); }
             if (purchasedItems != null)
             {
                 purchashedItems.Clear();
@@ -143,7 +143,7 @@ namespace IngameShop.Mono
             }
             if (purchasedItems != null || inventoryItems != null || prices != null)
             {
-                if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[UpdateShopInventoryFromNetwork] Inventory Update From Network Complete"); }
+                if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[ShopInventory] [UpdateShopInventoryFromNetwork] Inventory Update From Network Complete"); }
                 UpdateUi();
             }
             
