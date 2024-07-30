@@ -3,6 +3,7 @@ using Endnight.Animation;
 using RedLoader;
 using Sons.Items.Core;
 using SonsSdk;
+using TheForest.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -367,6 +368,46 @@ namespace IngameShop.Mono
                 {
                     GameObject.Destroy(addedPreviewByChildNumber);
                 }
+            }
+        }
+
+        public void PurchaseItem(int index)
+        {
+            bool removedItem = false;
+            Dictionary<int, int> priceDict = inventory.GetPriceList();
+            if (priceDict == null || priceDict.Keys.Count == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Price Dictonary Is Empy"); return; }
+            string activeBuyItemName = previewItemSlots[index].transform.GetChild(0).gameObject.name; // Should Always Be Active Sell Item On Slot
+            if (string.IsNullOrEmpty(activeBuyItemName)) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Purchase Item Not Found"); return; }
+            int itemIdFromGO;
+            if (int.TryParse(activeBuyItemName, out itemIdFromGO))
+            {
+                if (itemIdFromGO == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] itemIdFromGO = 0"); return; }
+                else
+                {
+                    string checkName = ItemDatabaseManager.ItemById(itemIdFromGO).Name;
+                    if (string.IsNullOrEmpty(checkName)) { { Misc.Msg("[ShopWorldUi] [PurchaseItem] Invalid Item From ItemDatabaseManager"); return; } }
+                    int priceItem = priceDict[itemIdFromGO];
+                    if (priceItem == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] PriceItem From Dictonary == 0"); return; }
+                    if (LocalPlayer.Inventory.AmountOf(priceItem) >= 1)
+                    {
+                        inventory.BuyAddItem(itemIdFromGO, 1);
+                        LocalPlayer.Inventory.RemoveItem(priceItem, 1);
+                        removedItem = true;
+                    }
+                    else
+                    {
+                        SonsTools.ShowMessage($"[ShopWorldUi] [PurchaseItem] You Are Borke, You Dont Have Enogth Of, ItemId: {priceItem}");
+                        Misc.Msg($"[ShopWorldUi] [PurchaseItem] You Are Borke, You Dont Have Enogth Of, ItemId: {priceItem}");
+                        return;
+                    }
+                    
+                }
+            }
+            else { Misc.Msg($"[ShopWorldUi] [PurchaseItem] Could Not Convert string '{activeBuyItemName}' to int"); return; }
+            if (removedItem)
+            {
+                // Send Sync Event
+                IngameTools.TestSyncShop.CommonSendSyncEvent(gameObject);
             }
         }
     }

@@ -513,9 +513,9 @@ public class IngameShopUi
                             }
                             else
                             {
-                                IngameShopUi.OpenPanel("ShopAdminUi");
                                 if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
                                 {
+                                    IngameShopUi.OpenPanel("ShopAdminUi");
                                     PauseMenu._instance.Open();
                                 }
                                 IngameShopUi.inventory = shopInventory;
@@ -527,11 +527,37 @@ public class IngameShopUi
 
                     else if (shopGeneric.remove.IsActive)
                     {
-
+                        if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
+                        {
+                            PauseMenu._instance.Open();
+                            IngameShopUi.OpenPanel("ShopAdminUi");
+                        }
                     }
                 }
+                Mono.ShopWorldUi shopWorldUi = shop.GetComponent<Mono.ShopWorldUi>();
+                if (shopWorldUi == null) { Misc.Msg("[OnKeyClick] shopWorldUi == null [CANT BUY ITEM IN THIS CASE]"); return; }
+                else if (shopGeneric.item1.IsActive)
+                {
+                    shopWorldUi.PurchaseItem(0); // 0 = Item1
+                }
+                //else if (shopGeneric.item2.IsActive)
+                //{
+                //    shopWorldUi.PurchaseItem(1); // 1 = Item2
+                //}
+                //else if (shopGeneric.item3.IsActive)
+                //{
+                //    shopWorldUi.PurchaseItem(2); // 2 = Item3
+                //}
+                //else if (shopGeneric.item4.IsActive)
+                //{
+                //    shopWorldUi.PurchaseItem(3); // 3 = Item4
+                //}
+                //else if (shopGeneric.item5.IsActive)
+                //{
+                //    shopWorldUi.PurchaseItem(4); // 4 = Item5
+                //}
             }
-            
+
         }
         
     }

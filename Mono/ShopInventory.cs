@@ -117,12 +117,6 @@ namespace IngameShop.Mono
         {
             if (shopWorldUi != null) { shopWorldUi.UpdatePriceUiOnly(); }
         }
-
-        public void PurchaseItem(int itemId)
-        {
-
-        }
-
         public void UpdateShopInventoryFromNetwork(Dictionary<int, int> purchasedItems, Dictionary<int, int> inventoryItems, Dictionary<int, int> prices)
         {
             if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[ShopInventory] [UpdateShopInventoryFromNetwork] Updating Inventory From Network"); }
@@ -152,6 +146,47 @@ namespace IngameShop.Mono
         public (Dictionary<int, int>, Dictionary<int, int>, Dictionary<int, int>) GetAllDicts()
         {
             return (purchashedItems, HeldInventory, PriceDict);
+        }
+
+        public void BuyAddItem(int itemID, int quantity)
+        {
+            if (purchashedItems.ContainsKey(itemID))
+            {
+                purchashedItems[itemID] += quantity;
+            }
+            else
+            {
+                if (purchashedItems.Keys.Count >= 5)
+                {
+                    Misc.Msg("Can't Add More Than 5 Items To The Shop");
+                    return;
+                }
+                purchashedItems.Add(itemID, quantity);
+            }
+        }
+        public void BuyRemoveItem(int itemID, int quantity)
+        {
+            if (purchashedItems.ContainsKey(itemID))
+            {
+                int currentQuantity = purchashedItems[itemID];
+                if (currentQuantity >= quantity)
+                {
+                    purchashedItems[itemID] -= quantity;
+                    if (purchashedItems[itemID] <= 0)
+                    {
+                        purchashedItems.Remove(itemID); // Optionally remove the item if quantity is zero or less
+                    }
+                    UpdateUi();
+                }
+                else
+                {
+                    Misc.Msg($"Not enough quantity of item {itemID} to remove.");
+                }
+            }
+            else
+            {
+                Misc.Msg($"{itemID} Not Found In Inventory");
+            }
         }
     }
 }
