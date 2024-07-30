@@ -127,7 +127,24 @@ namespace IngameShop.Mono
                             GameObject.Destroy(item);
                         }
                     }
-                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<Animator> animators = spawnedItem.GetComponentsInChildren<Animator>();
+
+                    foreach(Transform childT in spawnedItem.GetChildren())
+                    {
+                        if (childT.name.Contains("Animated"))
+                        {
+                            Animator childA = childT.GetComponent<Animator>();
+                            if (childA != null) { childA.enabled = false; GameObject.Destroy(childA); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed Animator GetComponent"); }
+                            AnimationSync childAS = childT.GetComponent<AnimationSync>();
+                            if (childAS != null) { childAS.enabled = false; GameObject.Destroy(childAS); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed AnimationSync GetComponent"); }
+
+                            Animator childAA = childT.GetComponentInChildren<Animator>();
+                            if (childAA != null) { childAA.enabled = false; GameObject.Destroy(childAA); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed Animator GetComponentInChildren"); }
+                            AnimationSync childASS = childT.GetComponentInChildren<AnimationSync>();
+                            if (childASS != null) { childASS.enabled = false; GameObject.Destroy(childASS); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed AnimationSync GetComponentInChildren"); }
+                        }
+                    }
+
+                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<Animator> animators = spawnedItem.GetComponentsInChildren<Animator>(includeInactive: true);
                     for (int i = 0; i < animators.Length; i++)
                     {
                         Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Animator Loop: {i}");
@@ -135,7 +152,7 @@ namespace IngameShop.Mono
                         if (anim != null) { anim.enabled = false; GameObject.Destroy(anim); }
                         else { Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Animator Loop: Animator = null!"); }
                     }
-                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<AnimationSync> animatorssync = spawnedItem.GetComponentsInChildren<AnimationSync>();
+                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<AnimationSync> animatorssync = spawnedItem.GetComponentsInChildren<AnimationSync>(includeInactive: true);
                     for (int i = 0; i < animatorssync.Length; i++)
                     {
                         Misc.Msg($"[ShopWorldUi] [AddPreviewItem] AnimationSync Loop: {i}");
