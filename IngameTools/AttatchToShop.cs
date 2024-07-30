@@ -51,38 +51,16 @@ namespace IngameShop.IngameTools
                             }
 
                             spawnedItem.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-                            GameObject pickupGui = spawnedItem.transform.FindChild("_PickupGui_").gameObject;
-                            pickupGui.SetActive(false);
 
-                            GameObject grassPusher = spawnedItem.transform.FindChild("GrassPusherPiv").gameObject;
-                            grassPusher.SetActive(false);
-
-                            GameObject trigger = spawnedItem.transform.FindChild("Trigger").gameObject;
-                            trigger.SetActive(false);
-
-                            GameObject dragLocation = spawnedItem.transform.FindChild("DragLocation").gameObject;
-                            dragLocation.SetActive(false);
-
-                            GameObject grabPosition = spawnedItem.transform.FindChild("GrabPosition").gameObject;
-                            grabPosition.SetActive(false);
-
-                            GameObject vailPickupTransform = spawnedItem.transform.FindChild("VailPickupTransform").gameObject;
-                            vailPickupTransform.SetActive(false);
-
-                            GameObject meleeCollider = spawnedItem.transform.FindChild("MeleeCollider").gameObject;
-                            meleeCollider.SetActive(false);
-
-                            GameObject waterSensor = spawnedItem.transform.FindChild("WaterSensor").gameObject;
-                            waterSensor.SetActive(false);
-
-                            GameObject.Destroy(pickupGui);
-                            GameObject.Destroy(grassPusher);
-                            GameObject.Destroy(trigger);
-                            GameObject.Destroy(dragLocation);
-                            GameObject.Destroy(grabPosition);
-                            GameObject.Destroy(vailPickupTransform);
-                            GameObject.Destroy(meleeCollider);
-                            GameObject.Destroy(waterSensor);
+                            List<Transform> childs = spawnedItem.transform.GetChildren();
+                            foreach (Transform child in childs)
+                            {
+                                if (!child.name.Contains("Render") && !child.name.Contains("Clone"))
+                                {
+                                    child.gameObject.SetActive(false);
+                                    GameObject.Destroy(child.gameObject);
+                                }
+                            }
 
                             return "Added To Slot 1";
                         }

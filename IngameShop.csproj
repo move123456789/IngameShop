@@ -95,6 +95,9 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>$(GameDir)\_RedLoader\Game\Unity.TextMeshPro.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(GameDir)\_RedLoader\Game\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="manifest.json">
