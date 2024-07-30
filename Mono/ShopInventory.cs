@@ -6,6 +6,7 @@ namespace IngameShop.Mono
     [RegisterTypeInIl2Cpp]
     public class ShopInventory : MonoBehaviour
     {
+        private Dictionary<int, int> purchashedItems = new Dictionary<int, int>();
         public Dictionary<int, int> HeldInventory = new Dictionary<int, int>();
         private Dictionary<int, int> PriceDict = new Dictionary<int, int>();
         private Mono.ShopWorldUi shopWorldUi = null;
@@ -115,6 +116,37 @@ namespace IngameShop.Mono
         public void UpdatePriceUi()
         {
             if (shopWorldUi != null) { shopWorldUi.UpdatePriceUiOnly(); }
+        }
+
+        public void PurchaseItem(int itemId)
+        {
+
+        }
+
+        public void UpdateShopInventoryFromNetwork(Dictionary<int, int> purchasedItems, Dictionary<int, int> inventoryItems, Dictionary<int, int> prices)
+        {
+            if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[UpdateShopInventoryFromNetwork] Updating Inventory From Network"); }
+            if (purchasedItems != null)
+            {
+                purchashedItems.Clear();
+                purchashedItems = purchasedItems;
+            }
+            if (inventoryItems != null)
+            {
+                HeldInventory.Clear();
+                HeldInventory = inventoryItems;
+            }
+            if (prices != null)
+            {
+                PriceDict.Clear();
+                PriceDict = prices;
+            }
+            if (purchasedItems != null || inventoryItems != null || prices != null)
+            {
+                if (Config.NetworkDebugIngameShop.Value) { Misc.Msg("[UpdateShopInventoryFromNetwork] Inventory Update From Network Complete"); }
+                UpdateUi();
+            }
+            
         }
     }
 }

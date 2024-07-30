@@ -13,6 +13,7 @@ namespace IngameShop.Network
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SpawnShop>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.ShopSettings>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.JoinedServer>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SyncSingeShop>();
             }
         }
         public static void UnregisterEvents()
@@ -24,6 +25,7 @@ namespace IngameShop.Network
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.SpawnShop>();
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.ShopSettings>();
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.JoinedServer>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SyncSingeShop>();
             }
         }
 
