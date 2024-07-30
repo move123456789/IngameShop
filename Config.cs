@@ -13,6 +13,8 @@ public static class Config
     public static ConfigEntry<bool> NetworkDebugIngameShop { get; private set; }
     public static KeybindConfigEntry Cmd1 { get; private set; }
     public static ConfigEntry<bool> Cmd1Disable { get; private set; }
+    public static KeybindConfigEntry Cmd2 { get; private set; }
+    public static ConfigEntry<bool> Cmd2Disable { get; private set; }
     internal static void Init()
     {
         IngameShopCategory = ConfigSystem.CreateCategory("ingameShop", "IngameShop");
@@ -62,6 +64,24 @@ public static class Config
             if (Config.Cmd1Disable.Value)
             {
                 IngameShopUi.UITesting();
+            }
+        });
+
+        Cmd2Disable = IngameShopCategory.CreateEntry(
+            "enable_logging_advanced_uitwo",
+            false,
+            "Enables Ui Testing Kit",
+            "Enables Ui Testing Kit");
+        Cmd2 = IngameShopCategory.CreateKeybindEntry(
+                  "command_2",
+                  "numpad9",
+                  "Command2",
+                  "Command 2");
+        Cmd2.Notify(() =>
+        {
+            if (Config.Cmd2Disable.Value)
+            {
+                IngameShopUi.UITesting2();
             }
         });
     }

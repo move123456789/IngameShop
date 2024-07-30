@@ -243,9 +243,167 @@ public class IngameShopUi
 
         var mainContainer1 = SContainer
             .Dock(EDockType.Fill)
-            .Background(MainBgBlack).Margin(200);
-        recivePanel.Add(mainContainer);
+            .Horizontal()
+            .Background(MainBgBlack).Margin(200).Padding(0, 0, 150, 150);
+        recivePanel.Add(mainContainer1);
 
+        var exitButton1 = SBgButton
+            .Text("x").Background(GetBackgroundSprite(EBackground.Round28), Image.Type.Sliced).Color(ColorFromString("#FF234B"))
+            .Pivot(1, 1).Anchor(AnchorType.TopRight).Position(-60, -60)
+            .Size(60, 60).Ppu(1.7f).Notify(CloseBougthPanel);
+        exitButton.SetParent(recivePanel);
+
+        var title1 = SLabel.Text("IngameShop")
+            .FontColor("#444").Font(EFont.RobotoRegular)
+            .PHeight(100).FontSize(32)
+            .Anchor(AnchorType.TopCenter)
+            //.Pivot(0.5f, 0.7f)
+            .Position(null, -250)
+            .FontSpacing(10);
+        title1.SetParent(recivePanel);
+
+        var message1 = SLabel.Text("[INFO MESSAGE]")
+            .FontColor("#444").Font(EFont.RobotoRegular)
+            .PHeight(100).FontSize(32)
+            .Anchor(AnchorType.TopCenter)
+            .Position(null, -300)
+            .FontSpacing(10);
+        message1.SetParent(recivePanel);
+
+        // Item 1
+        var Item1Recive = SContainer
+            .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
+        Item1Recive.SetParent(mainContainer1);
+
+        var Item1ItemName = SLabel.Text("[ITEM NAME]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item1ItemName.SetParent(Item1Recive);
+
+        var Item1ItemID = SLabel.Text("[ITEM ID]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item1ItemID.SetParent(Item1Recive);
+
+        var Item1ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item1ItemQuantity.SetParent(Item1Recive);
+
+        var Item1ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item1ToInventory.OnClick(() =>
+        {
+            //RemoveItemFromUi(Item1);
+        });
+        Item1ToInventory.SetParent(Item1Recive);
+
+        // Item 2
+        var Item2Recive = SContainer
+            .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
+        Item2Recive.SetParent(mainContainer1);
+
+        var Item2ItemName = SLabel.Text("[ITEM NAME]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item2ItemName.SetParent(Item2Recive);
+
+        var Item2ItemID = SLabel.Text("[ITEM ID]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item2ItemID.SetParent(Item2Recive);
+
+        var Item2ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item2ItemQuantity.SetParent(Item2Recive);
+
+        var Item2ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item2ToInventory.OnClick(() =>
+        {
+            //RemoveItemFromUi(Item2);
+        });
+        Item2ToInventory.SetParent(Item2Recive);
+
+        // Item 3
+        var Item3Recive = SContainer
+            .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
+        Item3Recive.SetParent(mainContainer1);
+
+        var Item3ItemName = SLabel.Text("[ITEM NAME]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item3ItemName.SetParent(Item3Recive);
+
+        var Item3ItemID = SLabel.Text("[ITEM ID]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item3ItemID.SetParent(Item3Recive);
+
+        var Item3ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item3ItemQuantity.SetParent(Item3Recive);
+
+        var Item3ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item3ToInventory.OnClick(() =>
+        {
+            //RemoveItemFromUi(Item3);
+        });
+        Item3ToInventory.SetParent(Item3Recive);
+
+        // Item 4
+        var Item4Recive = SContainer
+            .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
+        Item4Recive.SetParent(mainContainer1);
+
+        var Item4ItemName = SLabel.Text("[ITEM NAME]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item4ItemName.SetParent(Item4Recive);
+
+        var Item4ItemID = SLabel.Text("[ITEM ID]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item4ItemID.SetParent(Item4Recive);
+
+        var Item4ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item4ItemQuantity.SetParent(Item4Recive);
+
+        var Item4ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item4ToInventory.OnClick(() =>
+        {
+            //RemoveItemFromUi(Item4);
+        });
+        Item4ToInventory.SetParent(Item4Recive);
+
+        // Item 5
+        var Item5Recive = SContainer
+            .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
+        Item5Recive.SetParent(mainContainer1);
+
+        var Item5ItemName = SLabel.Text("[ITEM NAME]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item5ItemName.SetParent(Item5Recive);
+
+        var Item5ItemID = SLabel.Text("[ITEM ID]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item5ItemID.SetParent(Item5Recive);
+
+        var Item5ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
+            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item5ItemQuantity.SetParent(Item5Recive);
+
+        var Item5ToInventory = SLabel.Text("1x To Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
+        Item5ToInventory.OnClick(() =>
+        {
+            //RemoveItemFromUi(Item5);
+        });
+        Item5ToInventory.SetParent(Item5Recive);
     }
 
     internal static void TogglePanelUi(string panelName)
@@ -266,6 +424,14 @@ public class IngameShopUi
     internal static void CloseAddPanel()
     {
         TogglePanel("ShopAdminUi", false);
+        if (PauseMenu.IsActive)
+        {
+            PauseMenu._instance.Close();
+        }
+    }
+    internal static void CloseBougthPanel()
+    {
+        TogglePanel("ShopBougthUi", false);
         if (PauseMenu.IsActive)
         {
             PauseMenu._instance.Close();
@@ -584,6 +750,11 @@ public class IngameShopUi
         Item3.Text("ItemId: 444, Amount: 3");
 
         Misc.Msg($"Item 1 Text: [{Item1.TextObject.text}]");
+    }
+
+    public static void UITesting2()
+    {
+        OpenPanel("ShopBougthUi");
     }
 
 
