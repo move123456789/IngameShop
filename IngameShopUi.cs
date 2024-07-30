@@ -36,6 +36,34 @@ public class IngameShopUi
     internal static SUiElement<SContainerOptions> InputItemIdContainer;
     internal static SUiElement<SContainerOptions> AddItemContainer;
     //.Background(ColorFromString("#4287f5"))
+
+    // Recive Item UI
+    internal static SUiElement<SContainerOptions> Item1Recive;
+    internal static SUiElement<SContainerOptions> Item2Recive;
+    internal static SUiElement<SContainerOptions> Item3Recive;
+    internal static SUiElement<SContainerOptions> Item4Recive;
+    internal static SUiElement<SContainerOptions> Item5Recive;
+    internal static SUiElement<SLabelOptions> Item1ItemName;
+    internal static SUiElement<SLabelOptions> Item2ItemName;
+    internal static SUiElement<SLabelOptions> Item3ItemName;
+    internal static SUiElement<SLabelOptions> Item4ItemName;
+    internal static SUiElement<SLabelOptions> Item5ItemName;
+    internal static SUiElement<SLabelOptions> Item1ItemID;
+    internal static SUiElement<SLabelOptions> Item2ItemID;
+    internal static SUiElement<SLabelOptions> Item3ItemID;
+    internal static SUiElement<SLabelOptions> Item4ItemID;
+    internal static SUiElement<SLabelOptions> Item5ItemID;
+    internal static SUiElement<SLabelOptions> Item1ItemQuantity;
+    internal static SUiElement<SLabelOptions> Item2ItemQuantity;
+    internal static SUiElement<SLabelOptions> Item3ItemQuantity;
+    internal static SUiElement<SLabelOptions> Item4ItemQuantity;
+    internal static SUiElement<SLabelOptions> Item5ItemQuantity;
+    internal static SUiElement<SContainerOptions>[] ReciveItemArray = new SUiElement<SContainerOptions>[] { Item1Recive, Item2Recive, Item3Recive, Item4Recive, Item5Recive };
+    internal static SUiElement<SLabelOptions>[] ReciveItemNameArray = new SUiElement<SLabelOptions>[] { Item1ItemName, Item2ItemName, Item3ItemName, Item4ItemName, Item5ItemName };
+    internal static SUiElement<SLabelOptions>[] ReciveItemIDArray = new SUiElement<SLabelOptions>[] { Item1ItemID, Item2ItemID, Item3ItemID, Item4ItemID, Item5ItemID };
+    internal static SUiElement<SLabelOptions>[] ReciveItemQuantityArray = new SUiElement<SLabelOptions>[] { Item1ItemQuantity, Item2ItemQuantity, Item3ItemQuantity, Item4ItemQuantity, Item5ItemQuantity };
+
+
     public static void Create()
     {
         var panel = RegisterNewPanel("ShopAdminUi")
@@ -271,21 +299,21 @@ public class IngameShopUi
         message1.SetParent(recivePanel);
 
         // Item 1
-        var Item1Recive = SContainer
+        Item1Recive = SContainer
             .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
         Item1Recive.SetParent(mainContainer1);
 
-        var Item1ItemName = SLabel.Text("[ITEM NAME]")
+        Item1ItemName = SLabel.Text("[ITEM NAME]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1ItemName.SetParent(Item1Recive);
 
-        var Item1ItemID = SLabel.Text("[ITEM ID]")
+        Item1ItemID = SLabel.Text("[ITEM ID]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1ItemID.SetParent(Item1Recive);
 
-        var Item1ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+        Item1ItemQuantity = SLabel.Text("[ITEM AMOUT]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1ItemQuantity.SetParent(Item1Recive);
@@ -298,21 +326,21 @@ public class IngameShopUi
         Item1ToInventory.SetParent(Item1Recive);
 
         // Item 2
-        var Item2Recive = SContainer
+        Item2Recive = SContainer
             .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
         Item2Recive.SetParent(mainContainer1);
 
-        var Item2ItemName = SLabel.Text("[ITEM NAME]")
+        Item2ItemName = SLabel.Text("[ITEM NAME]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2ItemName.SetParent(Item2Recive);
 
-        var Item2ItemID = SLabel.Text("[ITEM ID]")
+        Item2ItemID = SLabel.Text("[ITEM ID]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2ItemID.SetParent(Item2Recive);
 
-        var Item2ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+        Item2ItemQuantity = SLabel.Text("[ITEM AMOUT]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2ItemQuantity.SetParent(Item2Recive);
@@ -325,21 +353,21 @@ public class IngameShopUi
         Item2ToInventory.SetParent(Item2Recive);
 
         // Item 3
-        var Item3Recive = SContainer
+        Item3Recive = SContainer
             .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
         Item3Recive.SetParent(mainContainer1);
 
-        var Item3ItemName = SLabel.Text("[ITEM NAME]")
+        Item3ItemName = SLabel.Text("[ITEM NAME]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3ItemName.SetParent(Item3Recive);
 
-        var Item3ItemID = SLabel.Text("[ITEM ID]")
+        Item3ItemID = SLabel.Text("[ITEM ID]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3ItemID.SetParent(Item3Recive);
 
-        var Item3ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+        Item3ItemQuantity = SLabel.Text("[ITEM AMOUT]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3ItemQuantity.SetParent(Item3Recive);
@@ -352,21 +380,21 @@ public class IngameShopUi
         Item3ToInventory.SetParent(Item3Recive);
 
         // Item 4
-        var Item4Recive = SContainer
+        Item4Recive = SContainer
             .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
         Item4Recive.SetParent(mainContainer1);
 
-        var Item4ItemName = SLabel.Text("[ITEM NAME]")
+        Item4ItemName = SLabel.Text("[ITEM NAME]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4ItemName.SetParent(Item4Recive);
 
-        var Item4ItemID = SLabel.Text("[ITEM ID]")
+        Item4ItemID = SLabel.Text("[ITEM ID]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4ItemID.SetParent(Item4Recive);
 
-        var Item4ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+        Item4ItemQuantity = SLabel.Text("[ITEM AMOUT]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4ItemQuantity.SetParent(Item4Recive);
@@ -379,21 +407,21 @@ public class IngameShopUi
         Item4ToInventory.SetParent(Item4Recive);
 
         // Item 5
-        var Item5Recive = SContainer
+        Item5Recive = SContainer
             .Background(BG_CYAN).Vertical().PHeight(200).PWidth(200);
         Item5Recive.SetParent(mainContainer1);
 
-        var Item5ItemName = SLabel.Text("[ITEM NAME]")
+        Item5ItemName = SLabel.Text("[ITEM NAME]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5ItemName.SetParent(Item5Recive);
 
-        var Item5ItemID = SLabel.Text("[ITEM ID]")
+        Item5ItemID = SLabel.Text("[ITEM ID]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5ItemID.SetParent(Item5Recive);
 
-        var Item5ItemQuantity = SLabel.Text("[ITEM AMOUT]")
+        Item5ItemQuantity = SLabel.Text("[ITEM AMOUT]")
             .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5ItemQuantity.SetParent(Item5Recive);
