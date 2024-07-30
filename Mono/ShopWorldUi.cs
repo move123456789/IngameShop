@@ -22,6 +22,7 @@ namespace IngameShop.Mono
         private Text[] itemQuantity;
         private Text[] itemPrice;
         private GameObject[] itemGameObject;
+        private int[] pickupPrefabs = new int[] { 78, 640, 438 };
 
         private void Start ()
         {
@@ -40,6 +41,19 @@ namespace IngameShop.Mono
             itemPrice = new[] { item1Price, null, null, null, null };
             itemGameObject = new[] { item1, null, null, null, null };
             previewItemSlots = new GameObject[] { previewItem1, null, null, null, null };
+
+            HideAllItemsUi();
+        }
+
+        public void HideAllItemsUi()
+        {
+            for (int i = 0; i < itemGameObject.Length; i++)
+            {
+                if (itemGameObject[i] != null)
+                {
+                    itemGameObject[i].SetActive(false);
+                }
+            }
         }
 
         private void AddPreviewItem(int itemId, int position)
@@ -76,9 +90,9 @@ namespace IngameShop.Mono
                     GameObject.Destroy(addedPreviewByChildNumber);
                 }
             }
-            if (itemId == 640 || itemId == 78)
+            if (pickupPrefabs.Contains(itemId))
             {
-                AddPreviewItemPickup(itemId, position, previewItemSlots, slotTransform);
+                AddPreviewItemPickup(itemId, position, slotTransform);
                 return;
             }
             Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Start, ItemId: {itemId}, ListPosition: {position}");
@@ -128,39 +142,6 @@ namespace IngameShop.Mono
                         }
                     }
 
-                    foreach(Transform childT in spawnedItem.GetChildren())
-                    {
-                        if (childT.name.Contains("Animated"))
-                        {
-                            Animator childA = childT.GetComponent<Animator>();
-                            if (childA != null) { childA.enabled = false; GameObject.Destroy(childA); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed Animator GetComponent"); }
-                            AnimationSync childAS = childT.GetComponent<AnimationSync>();
-                            if (childAS != null) { childAS.enabled = false; GameObject.Destroy(childAS); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed AnimationSync GetComponent"); }
-
-                            Animator childAA = childT.GetComponentInChildren<Animator>();
-                            if (childAA != null) { childAA.enabled = false; GameObject.Destroy(childAA); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed Animator GetComponentInChildren"); }
-                            AnimationSync childASS = childT.GetComponentInChildren<AnimationSync>();
-                            if (childASS != null) { childASS.enabled = false; GameObject.Destroy(childASS); Misc.Msg("[ShopWorldUi] [AddPreviewItem] Destroyed AnimationSync GetComponentInChildren"); }
-                        }
-                    }
-
-                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<Animator> animators = spawnedItem.GetComponentsInChildren<Animator>(includeInactive: true);
-                    for (int i = 0; i < animators.Length; i++)
-                    {
-                        Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Animator Loop: {i}");
-                        Animator anim = animators[i];
-                        if (anim != null) { anim.enabled = false; GameObject.Destroy(anim); }
-                        else { Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Animator Loop: Animator = null!"); }
-                    }
-                    Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppArrayBase<AnimationSync> animatorssync = spawnedItem.GetComponentsInChildren<AnimationSync>(includeInactive: true);
-                    for (int i = 0; i < animatorssync.Length; i++)
-                    {
-                        Misc.Msg($"[ShopWorldUi] [AddPreviewItem] AnimationSync Loop: {i}");
-                        AnimationSync anims = animatorssync[i];
-                        if (anims != null) { anims.enabled = false; GameObject.Destroy(anims); }
-                        else { Misc.Msg($"[ShopWorldUi] [AddPreviewItem] AnimationSync Loop: AnimationSync = null!"); }
-                    }
-                    Misc.Msg($"[ShopWorldUi] [AddPreviewItem] Length, Animator: {animators.Count}, AnimationSync: {animatorssync.Count}");
                 }
                 else
                 {
@@ -174,7 +155,7 @@ namespace IngameShop.Mono
             }
         }
 
-        private void AddPreviewItemPickup(int itemId, int position, GameObject[] slots, Transform slotTransform)
+        private void AddPreviewItemPickup(int itemId, int position, Transform slotTransform)
         {
             Misc.Msg($"[ShopWorldUi] [AddPreviewItemPickup] Start, ItemId: {itemId}, ListPosition: {position}");
             var itemData = ItemDatabaseManager.ItemById(itemId);
@@ -205,7 +186,7 @@ namespace IngameShop.Mono
 
             Misc.Msg("[ShopWorldUi] [AddPreviewItem] Adding Preview Item");
             // Assuming AddGo is a method that adds the GameObject to the slot
-            slots[position].AddGo($"{itemId}");
+            previewItemSlots[position].AddGo($"{itemId}");
 
             // Recheck if the item was added properly
             Transform toBeAddedToTransform = slotTransform.Find($"{itemId}");

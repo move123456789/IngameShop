@@ -236,7 +236,15 @@ public class IngameShopUi
         });
         AddItemButton.SetParent(AddItemContainer);
 
+        var recivePanel = RegisterNewPanel("ShopBougthUi")
+           .Dock(EDockType.Fill).OverrideSorting(100);
 
+        ClosePanel("ShopBougthUi");
+
+        var mainContainer1 = SContainer
+            .Dock(EDockType.Fill)
+            .Background(MainBgBlack).Margin(200);
+        recivePanel.Add(mainContainer);
 
     }
 
@@ -488,6 +496,7 @@ public class IngameShopUi
                     SonsTools.ShowMessage($"Removed 1x: {itemIdExtracted} To Shop");
                     Misc.Msg($"Removed 1x: {itemIdExtracted} To Shop");
                     inventory.RemoveItem((int)itemIdExtracted, 1);
+                    LocalPlayer.Inventory.AddItem((int)itemIdExtracted, 1);
                 }
                 else
                 {

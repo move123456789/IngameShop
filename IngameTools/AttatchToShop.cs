@@ -20,6 +20,75 @@ namespace IngameShop.IngameTools
             return ItemDatabaseManager.ItemById(itemId).PickupPrefab.gameObject;
         }
 
+        public static string SpawnHeldItemOnGround(int itemId)
+        {
+            Transform transform = LocalPlayer._instance._mainCam.transform;
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            {
+                "Terrain"
+            }));
+            GameObject heldPrefab = GetHeldPrefab(itemId);
+            if (heldPrefab != null)
+            {
+                GameObject spawnedHeldPrefab = GameObject.Instantiate(heldPrefab, raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
+                return $"Successfully Spawned {itemId}";
+            }
+            return "FAILED: heldPrefab != null";
+        }
+
+        public static GameObject SpawnHeldItemOnGroundGameObject(int itemId)
+        {
+            Transform transform = LocalPlayer._instance._mainCam.transform;
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            {
+                "Terrain"
+            }));
+            GameObject heldPrefab = GetHeldPrefab(itemId);
+            if (heldPrefab != null)
+            {
+                GameObject spawnedHeldPrefab = GameObject.Instantiate(heldPrefab, raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
+                return spawnedHeldPrefab;
+            }
+            return null;
+        }
+
+        public static GameObject SpawnHeldItemOnGroundDisabledGameObject(int itemId)
+        {
+            Transform transform = LocalPlayer._instance._mainCam.transform;
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            {
+                "Terrain"
+            }));
+            GameObject heldPrefab = GetHeldPrefab(itemId);
+            if (heldPrefab != null)
+            {
+                GameObject spawnedHeldPrefab = GameObject.Instantiate(heldPrefab, raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
+                spawnedHeldPrefab.SetActive(false);
+                return spawnedHeldPrefab;
+            }
+            return null;
+        }
+
+        public static string SpawnPickupItemOnGround(int itemId)
+        {
+            Transform transform = LocalPlayer._instance._mainCam.transform;
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            {
+                "Terrain"
+            }));
+            GameObject pickupPrefab = GetPickupPrefab(itemId);
+            if (pickupPrefab != null)
+            {
+                GameObject spawnedPickupPrefab = GameObject.Instantiate(pickupPrefab, raycastHit.point + Vector3.up * 0.1f, LocalPlayer.Transform.rotation);
+                return $"Successfully Spawned {itemId}";
+            }
+            return "FAILED: pickupPrefab != null";
+        }
+
         public static string AttatchToCloseStore(GameObject gameObject)
         {
             if (gameObject == null) return "Failed";
