@@ -14,6 +14,10 @@ namespace IngameShop.Network
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.ShopSettings>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.JoinedServer>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SyncSingeShop>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopDict>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopPurchasedItemsDict>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopInventoryItemsDict>();
+                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopPricesDict>();
             }
         }
         public static void UnregisterEvents()
@@ -25,7 +29,11 @@ namespace IngameShop.Network
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.SpawnShop>();
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.ShopSettings>();
                 SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.JoinedServer>();
-                SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.SyncSingeShop>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.SyncSingeShop>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.UpdateSingeShopDict>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.UpdateSingeShopPurchasedItemsDict>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.UpdateSingeShopInventoryItemsDict>();
+                SimpleNetworkEvents.EventDispatcher.UnregisterEvent<Network.UpdateSingeShopPricesDict>();
             }
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace IngameShop.IngameTools
 {
-    public static class TestSyncShop
+    public static class SyncShopTools
     {
         public static string SendSyncEvent(GameObject shop)
         {

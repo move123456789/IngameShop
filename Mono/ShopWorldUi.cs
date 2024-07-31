@@ -341,7 +341,7 @@ namespace IngameShop.Mono
                     itemGameObject[i].SetActive(false);
                 }
             }
-            IngameTools.TestSyncShop.SendSyncEvent(gameObject);
+            IngameTools.SyncShopTools.SendSyncEvent(gameObject);
         }
 
         private void RemovePreviewItem(int index)
@@ -412,7 +412,7 @@ namespace IngameShop.Mono
             if (removedItem)
             {
                 // Send Sync Event
-                IngameTools.TestSyncShop.CommonSendSyncEvent(gameObject);
+                IngameTools.SyncShopTools.CommonSendSyncEvent(gameObject);
             }
         }
     }
