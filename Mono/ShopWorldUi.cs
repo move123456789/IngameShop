@@ -341,6 +341,7 @@ namespace IngameShop.Mono
                     itemGameObject[i].SetActive(false);
                 }
             }
+            IngameTools.TestSyncShop.SendSyncEvent(gameObject);
         }
 
         private void RemovePreviewItem(int index)
@@ -391,12 +392,16 @@ namespace IngameShop.Mono
                     if (LocalPlayer.Inventory.AmountOf(priceItem) >= 1)
                     {
                         inventory.BuyAddItem(itemIdFromGO, 1);
+                        inventory.RemoveItem(itemIdFromGO, 1);
                         LocalPlayer.Inventory.RemoveItem(priceItem, 1);
+                        LocalPlayer.Inventory.AddItem(itemIdFromGO, 1);
+                        SonsTools.ShowMessage($"Bougth 1x ItemId: {itemIdFromGO} With 1x {priceItem}");
+                        Misc.Msg($"[ShopWorldUi] [PurchaseItem] Bougth 1x ItemId: {itemIdFromGO} With 1x {priceItem}");
                         removedItem = true;
                     }
                     else
                     {
-                        SonsTools.ShowMessage($"[ShopWorldUi] [PurchaseItem] You Are Borke, You Dont Have Enogth Of, ItemId: {priceItem}");
+                        SonsTools.ShowMessage($"You Are Borke, You Dont Have Enogth Of, ItemId: {priceItem}");
                         Misc.Msg($"[ShopWorldUi] [PurchaseItem] You Are Borke, You Dont Have Enogth Of, ItemId: {priceItem}");
                         return;
                     }

@@ -76,7 +76,9 @@ public class IngameShop : SonsMod
         RaycastHit raycastHit;
         Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
         {
-                "Terrain"
+                "Terrain",
+                "Default",
+                "Prop"
         }));
         switch (args.ToLower())
         {

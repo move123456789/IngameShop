@@ -8,6 +8,7 @@ public static class Config
     internal static ConfigCategory IngameShopCategory { get; private set; }
 
     public static KeybindConfigEntry ToggleMenuKey { get; private set; }
+    public static KeybindConfigEntry ExitMenuKey { get; private set; }
     public static ConfigEntry<int> MaxShops { get; private set; }
     public static ConfigEntry<bool> DebugLoggingIngameShop { get; private set; }
     public static ConfigEntry<bool> NetworkDebugIngameShop { get; private set; }
@@ -35,6 +36,17 @@ public static class Config
         ToggleMenuKey.Notify(() =>
         {
             IngameShopUi.OnKeyClick();
+        });
+
+        ExitMenuKey = IngameShopCategory.CreateKeybindEntry(
+            "menu_exit_key",
+            "escape",
+            "Toggle Menu Key",
+            "Key For Exiting Menu (DEFAULT ESACPE).");
+        ExitMenuKey.DefaultValue = "escape";
+        ExitMenuKey.Notify(() =>
+        {
+            IngameShopUi.OnEscClick();
         });
 
         DebugLoggingIngameShop = IngameShopCategory.CreateEntry(

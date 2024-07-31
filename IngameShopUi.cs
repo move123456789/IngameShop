@@ -435,7 +435,13 @@ public class IngameShopUi
             TakeItemFromPurchasedItemsDict(index: 4, itemIdText: Item5ItemID);
         });
         Item5ToInventory.SetParent(Item5Recive);
-    }
+
+        // Try To Update Arrays Since They Throw Null
+        ReciveItemArray = new SUiElement<SContainerOptions>[] { Item1Recive, Item2Recive, Item3Recive, Item4Recive, Item5Recive };
+        ReciveItemNameArray = new SUiElement<SLabelOptions>[] { Item1ItemName, Item2ItemName, Item3ItemName, Item4ItemName, Item5ItemName };
+        ReciveItemIDArray = new SUiElement<SLabelOptions>[] { Item1ItemID, Item2ItemID, Item3ItemID, Item4ItemID, Item5ItemID };
+        ReciveItemQuantityArray = new SUiElement<SLabelOptions>[] { Item1ItemQuantity, Item2ItemQuantity, Item3ItemQuantity, Item4ItemQuantity, Item5ItemQuantity };
+}
 
     internal static void TogglePanelUi(string panelName)
     {
@@ -469,9 +475,9 @@ public class IngameShopUi
         }
     }
 
-    internal static bool IsPanelActive()
+    internal static bool IsPanelActive(string panelName)
     {
-        return GetPanel("ShopAdminUi").Root.activeSelf;
+        return GetPanel(panelName).Root.activeSelf;
     }
     internal static void OnKeyClick()
     {
@@ -482,7 +488,9 @@ public class IngameShopUi
         {
                 "Default"
         }));
-        if (raycastHit.collider == null || raycastHit.collider.transform.root == null) { return; }
+        if (raycastHit.collider == null) { return; }
+        if (raycastHit.collider.transform.root == null) { return; }
+        if (string.IsNullOrEmpty(raycastHit.collider.transform.root.name)) { return; }
         Misc.Msg($"Hit: {raycastHit.collider.transform.root.name}");
         if (raycastHit.collider.transform.root.name.Contains("Shop"))
         {
@@ -530,7 +538,7 @@ public class IngameShopUi
 
                     else if (shopGeneric.remove.IsActive)
                     {
-                        IngameShopUi.OpenPanel("ShopAdminUi");
+                        IngameShopUi.OpenPanel("ShopBougthUi");
                         if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
                         {
                             PauseMenu._instance.Open();
@@ -541,6 +549,7 @@ public class IngameShopUi
                 }
                 Mono.ShopWorldUi shopWorldUi = shop.GetComponent<Mono.ShopWorldUi>();
                 if (shopWorldUi == null) { Misc.Msg("[OnKeyClick] shopWorldUi == null [CANT BUY ITEM IN THIS CASE]"); return; }
+                if (shopGeneric.item1 == null) { return; }
                 else if (shopGeneric.item1.IsActive)
                 {
                     shopWorldUi.PurchaseItem(0); // 0 = Item1
@@ -565,6 +574,17 @@ public class IngameShopUi
 
         }
         
+    }
+    internal static void OnEscClick()
+    {
+        if (IsPanelActive("ShopBougthUi"))
+        {
+            ClosePanel("ShopBougthUi");
+        } 
+        else if (IsPanelActive("ShopAdminUi"))
+        {
+            ClosePanel("ShopAdminUi");
+        }
     }
 
     internal static async Task SendUiMessage(SUiElement<SLabelOptions> sLabel, string message)
@@ -753,9 +773,13 @@ public class IngameShopUi
                     LocalPlayer.Inventory.AddItem(itemID, 1);
                     SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
                     Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
-                    inventory.BuyRemoveItem(itemID, 1);
+                    int? itemToRemoveFromPurchasedItems = GetKeyByValue(inventory.GetPriceDict(), itemID);
+                    if (!itemToRemoveFromPurchasedItems.HasValue) { Misc.Msg("Item To Remove From Purchashed Items Is Null!"); itemToRemoveFromPurchasedItems = 0; }
+                    inventory.BuyRemoveItem((int)itemToRemoveFromPurchasedItems, 1);
                     UpdateTakeItemsUI();
                     SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
+                    SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
                 }
                 else
                 {
@@ -782,9 +806,13 @@ public class IngameShopUi
                     LocalPlayer.Inventory.AddItem(itemID, 1);
                     SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
                     Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
-                    inventory.BuyRemoveItem(itemID, 1);
+                    int? itemToRemoveFromPurchasedItems = GetKeyByValue(inventory.GetPriceDict(), itemID);
+                    if (!itemToRemoveFromPurchasedItems.HasValue) { Misc.Msg("Item To Remove From Purchashed Items Is Null!"); itemToRemoveFromPurchasedItems = 0; }
+                    inventory.BuyRemoveItem((int)itemToRemoveFromPurchasedItems, 1);
                     UpdateTakeItemsUI();
                     SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
+                    SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
+                    Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
                 }
                 else
                 {
@@ -836,25 +864,32 @@ public class IngameShopUi
         if (inventory != null)
         {
             int index = 0;
-
+            if (inventory.GetPurchasedDict() == null) { Misc.Msg("[UpdateTakeItemsUI] Inventory.GetPurchasedDict() == Null When It Should Not, Aborting"); }
+            if (inventory.GetPurchasedDict().Keys.Count < 1) { Misc.Msg("[UpdateTakeItemsUI] Inventory.GetPurchasedDict().Keys.Count Is Less Than 1 Key, Aborting"); }
             foreach (KeyValuePair<int, int> item in inventory.GetPurchasedDict())
             {
                 if (index >= ReciveItemNameArray.Length)
                     break;
 
                 var containerElement = ReciveItemArray[index];
+                if (containerElement == null) { Misc.Msg("[UpdateTakeItemsUI] ContainerElement == Null When It Should Not, Skip"); continue; }
                 var itemNameElement = ReciveItemNameArray[index];
+                if (itemNameElement == null) { Misc.Msg("[UpdateTakeItemsUI] ItemNameElement == Null When It Should Not, Skip"); continue; }
                 var itemIDElement = ReciveItemIDArray[index];
+                if (itemIDElement == null) { Misc.Msg("[UpdateTakeItemsUI] ItemIDElement == Null When It Should Not, Skip"); continue; }
                 var itemQuantityElement = ReciveItemQuantityArray[index];
+                if (itemQuantityElement == null) { Misc.Msg("[UpdateTakeItemsUI] ItemQuantityElement == Null When It Should Not, Skip"); continue; }
+
                 string thisItemName = "Item Name Not Found";
-                string itemNameString = ItemDatabaseManager.ItemById(item.Key).Name;
+                int itemsToGive = inventory.GetPrice(item.Key);
+                string itemNameString = ItemDatabaseManager.ItemById(itemsToGive).Name;
                 if (!string.IsNullOrEmpty(itemNameString))
                 {
                     thisItemName = itemNameString;
                 }
                 containerElement.Visible(true);
-                itemIDElement.Text($"{thisItemName}");
-                itemIDElement.Text($"ItemId: {item.Key}");
+                itemNameElement.Text($"{thisItemName}");
+                itemIDElement.Text($"ItemId: {itemsToGive}");
                 itemQuantityElement.Text($"Amount: {item.Value}");
 
                 index++;
@@ -863,6 +898,7 @@ public class IngameShopUi
             // Hide any remaining UI elements
             for (; index < ReciveItemNameArray.Length; index++)
             {
+                if (ReciveItemArray[index] == null) { Misc.Msg("[UpdateTakeItemsUI] ReciveItemArray[index] (CONTAINER) == Null When It Should Not, Skip"); continue; }
                 ReciveItemArray[index].Visible(false);
             }
         }
@@ -907,6 +943,20 @@ public class IngameShopUi
         return null;
     }
 
+    public static int? GetKeyByValue(Dictionary<int, int> dict, int value)
+    {
+        foreach (var kvp in dict)
+        {
+            if (kvp.Value == value)
+            {
+                return kvp.Key;
+            }
+        }
+
+        // Return null if the value is not found
+        return null;
+    }
+
     public static void UITesting()
     {
         OpenPanel("ShopAdminUi");
@@ -930,6 +980,10 @@ public class IngameShopUi
     public static void UITesting2()
     {
         OpenPanel("ShopBougthUi");
+        foreach (var item in ReciveItemArray)
+        {
+            item.Visible(true);
+        }
     }
 
 
