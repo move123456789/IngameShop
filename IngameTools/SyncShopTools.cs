@@ -7,6 +7,23 @@ namespace IngameShop.IngameTools
 {
     public static class SyncShopTools
     {
+        public static GameObject GetLookingAtShop()
+        {
+            Transform transform = LocalPlayer._instance._mainCam.transform;
+            RaycastHit raycastHit;
+            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            {
+                "Default"
+            }));
+            if (raycastHit.collider == null || raycastHit.collider.transform.root == null) { return null; }
+            if (raycastHit.collider.transform.root.name.Contains("Shop"))
+            {
+                GameObject shop = raycastHit.collider.transform.root.gameObject;
+                return shop;
+
+            }
+            return null;
+        }
         public static string SendSyncEvent(GameObject shop)
         {
             Misc.Msg("[TestSyncShop] [SendSyncEvent] Sending Event");
@@ -39,15 +56,15 @@ namespace IngameShop.IngameTools
         public static bool CommonSendSyncEvent(GameObject shop)
         {
             Mono.ShopGeneric shopGeneric = shop.GetComponent<Mono.ShopGeneric>();
-            if (shopGeneric == null) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] ShopGeneric Component Not Found On Object, Aborting"); return false; }
-            if (string.IsNullOrEmpty(shopGeneric.UniqueId)) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] UniqueId Null/Empty, Aborting"); return false; }
-            if (shopGeneric.gameObject.transform.position == Vector3.zero) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] Shop Pos == Vector3.zero, Aborting"); return false; }
+            if (shopGeneric == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] ShopGeneric Component Not Found On Object, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.UniqueId)) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] UniqueId Null/Empty, Aborting"); return false; }
+            if (shopGeneric.gameObject.transform.position == Vector3.zero) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Shop Pos == Vector3.zero, Aborting"); return false; }
             Mono.ShopInventory shopInventory = shop.GetComponent<Mono.ShopInventory>();
-            if (shopInventory == null) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] Shop Inventory Is Null, Aborting"); return false; }
+            if (shopInventory == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Shop Inventory Is Null, Aborting"); return false; }
             (Dictionary<int, int> purchashedItemsDict, Dictionary<int, int> heldInventoryDict, Dictionary<int, int> pricesDict) = shopInventory.GetAllDicts();
-            if (string.IsNullOrEmpty(shopGeneric.SteamId.ToString())) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] SteamId Null/Empty, Aborting"); return false; }
-            if (shopGeneric.SteamId.ToString() == "0") { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] SteamId 0, Aborting"); return false; }
-            if (string.IsNullOrEmpty(shopGeneric.GetOwner())) { Misc.Msg("[TestSyncShop] [CommonSendSyncEvent()] Owner Name Null/Empty, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.SteamId.ToString())) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] SteamId Null/Empty, Aborting"); return false; }
+            if (shopGeneric.SteamId.ToString() == "0") { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] SteamId 0, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.GetOwner())) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Owner Name Null/Empty, Aborting"); return false; }
             SyncSingeShopEvent.RaiseSyncSingeShopEvent(
                 uniqueId: shopGeneric.UniqueId,
                 pos: shopGeneric.gameObject.transform.position,
@@ -65,22 +82,60 @@ namespace IngameShop.IngameTools
             return true;
         }
 
-        public static GameObject GetLookingAtShop()
+        public static bool CommonSendSyncDictEvent(GameObject shop, ShopEventType eventType)
         {
-            Transform transform = LocalPlayer._instance._mainCam.transform;
-            RaycastHit raycastHit;
-            Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
+            Mono.ShopGeneric shopGeneric = shop.GetComponent<Mono.ShopGeneric>();
+            if (shopGeneric == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncUpdateSingeShopDictEvent()] ShopGeneric Component Not Found On Object, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.UniqueId)) { Misc.Msg("[SyncShopTools] [CommonSendSyncUpdateSingeShopDictEvent()] UniqueId Null/Empty, Aborting"); return false; }
+            Mono.ShopInventory shopInventory = shop.GetComponent<Mono.ShopInventory>();
+            if (shopInventory == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncUpdateSingeShopDictEvent()] Shop Inventory Is Null, Aborting"); return false; }
+            (Dictionary<int, int> purchashedItemsDict, Dictionary<int, int> heldInventoryDict, Dictionary<int, int> pricesDict) = shopInventory.GetAllDicts();
+            switch (eventType)
             {
-                "Default"
-            }));
-            if (raycastHit.collider == null || raycastHit.collider.transform.root == null) { return null; }
-            if (raycastHit.collider.transform.root.name.Contains("Shop"))
-            {
-                GameObject shop = raycastHit.collider.transform.root.gameObject;
-                return shop;
-
+                case ShopEventType.AllDicts:
+                    SyncSingeShopEvent.RaiseUpdateSingeShopDictEvent(
+                        uniqueId: shopGeneric.UniqueId,
+                        purchasedItems: purchashedItemsDict,
+                        inventoryItems: heldInventoryDict,
+                        prices: pricesDict,
+                        toPlayerId: null,
+                        toPlayerName: null
+                        );
+                    break;
+                case ShopEventType.PurchasedItemsDict:
+                    SyncSingeShopEvent.RaiseUpdateSingeShopPurchasedItemsDictEvent(
+                        uniqueId: shopGeneric.UniqueId,
+                        purchasedItems: purchashedItemsDict,
+                        toPlayerId: null,
+                        toPlayerName: null
+                        );
+                    break;
+                case ShopEventType.InventoryItemsDict:
+                    SyncSingeShopEvent.RaiseUpdateSingeShopInventoryItemsDictEvent(
+                        uniqueId: shopGeneric.UniqueId,
+                        inventoryItems: heldInventoryDict,
+                        toPlayerId: null,
+                        toPlayerName: null
+                        );
+                    break;
+                case ShopEventType.PricesDict:
+                    SyncSingeShopEvent.RaiseUpdateSingeShopPricesDictEvent(
+                        uniqueId: shopGeneric.UniqueId,
+                        prices: pricesDict,
+                        toPlayerId: null,
+                        toPlayerName: null
+                        );
+                    break;
             }
-            return null;
+            return true;
+        }
+
+        public enum ShopEventType
+        {
+            AllDicts,
+            PurchasedItemsDict,
+            InventoryItemsDict,
+            PricesDict
         }
     }
 }

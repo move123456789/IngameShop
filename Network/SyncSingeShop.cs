@@ -128,6 +128,18 @@ namespace IngameShop.Network
                 {
                     Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] Owner Name Requried, Aborting"); return;
                 }
+                if (purchasedItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] PurchasedItems, Aborting"); return;
+                }
+                if (inventoryItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] InventoryItems, Aborting"); return;
+                }
+                if (prices == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseSyncSingeShopEvent] Prices, Aborting"); return;
+                }
                 (ulong steamId, string stringSteamId) = Misc.MySteamId();
                 SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.SyncSingeShop
                 {
@@ -141,6 +153,136 @@ namespace IngameShop.Network
                     Prices = prices,
                     ShopOwner = shopOwnerId,
                     ShopOwnerName = shopOwnerName,
+                    ToPlayerName = sendToPlayerName,
+                    ToPlayerId = sendToPlayerID,
+                });
+            }
+        }
+
+        public static void RaiseUpdateSingeShopDictEvent(string uniqueId, Dictionary<int, int> purchasedItems, Dictionary<int, int> inventoryItems, Dictionary<int, int> prices, string toPlayerId = null, string toPlayerName = null)
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient || Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)
+            {
+                string sendToPlayerName = "";
+                string sendToPlayerID = "";
+                if (!string.IsNullOrEmpty(toPlayerName))
+                {
+                    sendToPlayerName = toPlayerName;
+                }
+                if (!string.IsNullOrEmpty(toPlayerId))
+                {
+                    sendToPlayerID = toPlayerId;
+                }
+                if (purchasedItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopDictEvent] PurchasedItems, Aborting"); return;
+                }
+                if (inventoryItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopDictEvent] InventoryItems, Aborting"); return;
+                }
+                if (prices == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopDictEvent] Prices, Aborting"); return;
+                }
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.UpdateSingeShopDict
+                {
+                    UniqueId = uniqueId,
+                    Sender = stringSteamId,
+                    PurchashedItems = purchasedItems,
+                    HeldInventory = inventoryItems,
+                    Prices = prices,
+                    ToPlayerName = sendToPlayerName,
+                    ToPlayerId = sendToPlayerID,
+                });
+            }
+        }
+
+        public static void RaiseUpdateSingeShopPurchasedItemsDictEvent(string uniqueId, Dictionary<int, int> purchasedItems, string toPlayerId = null, string toPlayerName = null)
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient || Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)
+            {
+                string sendToPlayerName = "";
+                string sendToPlayerID = "";
+                if (!string.IsNullOrEmpty(toPlayerName))
+                {
+                    sendToPlayerName = toPlayerName;
+                }
+                if (!string.IsNullOrEmpty(toPlayerId))
+                {
+                    sendToPlayerID = toPlayerId;
+                }
+                if (purchasedItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopPurchasedItemsDictEvent] PurchasedItems, Aborting"); return;
+                }
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.UpdateSingeShopPurchasedItemsDict
+                {
+                    UniqueId = uniqueId,
+                    Sender = stringSteamId,
+                    PurchashedItems = purchasedItems,
+                    ToPlayerName = sendToPlayerName,
+                    ToPlayerId = sendToPlayerID,
+                });
+            }
+        }
+
+        public static void RaiseUpdateSingeShopInventoryItemsDictEvent(string uniqueId, Dictionary<int, int> inventoryItems, string toPlayerId = null, string toPlayerName = null)
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient || Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)
+            {
+                string sendToPlayerName = "";
+                string sendToPlayerID = "";
+                if (!string.IsNullOrEmpty(toPlayerName))
+                {
+                    sendToPlayerName = toPlayerName;
+                }
+                if (!string.IsNullOrEmpty(toPlayerId))
+                {
+                    sendToPlayerID = toPlayerId;
+                }
+                if (inventoryItems == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopInventoryItemsDictEvent] InventoryItems, Aborting"); return;
+                }
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.UpdateSingeShopInventoryItemsDict
+                {
+                    UniqueId = uniqueId,
+                    Sender = stringSteamId,
+                    HeldInventory = inventoryItems,
+                    ToPlayerName = sendToPlayerName,
+                    ToPlayerId = sendToPlayerID,
+                });
+            }
+        }
+
+        public static void RaiseUpdateSingeShopPricesDictEvent(string uniqueId, Dictionary<int, int> prices, string toPlayerId = null, string toPlayerName = null)
+        {
+            if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient || Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)
+            {
+                string sendToPlayerName = "";
+                string sendToPlayerID = "";
+                if (!string.IsNullOrEmpty(toPlayerName))
+                {
+                    sendToPlayerName = toPlayerName;
+                }
+                if (!string.IsNullOrEmpty(toPlayerId))
+                {
+                    sendToPlayerID = toPlayerId;
+                }
+                if (prices == null)
+                {
+                    Misc.Msg($"[SyncSingeShopEvent] [RaiseUpdateSingeShopDictEvent] Prices, Aborting"); return;
+                }
+                (ulong steamId, string stringSteamId) = Misc.MySteamId();
+                SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.UpdateSingeShopPricesDict
+                {
+                    UniqueId = uniqueId,
+                    Sender = stringSteamId,
+                    Prices = prices,
                     ToPlayerName = sendToPlayerName,
                     ToPlayerId = sendToPlayerID,
                 });
