@@ -33,9 +33,9 @@ namespace IngameShop.IngameTools
                 else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
             } else { return "FAILED, Input GameObject is empty"; }
         }
-        public static string SendSyncEventLookingAt()
+        public static string SendSyncEventLookingAt(ShopEventType eventType)
         {
-            Misc.Msg("[TestSyncShop] [SendSyncEventLookingAt] Sending Event");
+            Misc.Msg("[SyncShopTools] [SendSyncEventLookingAt] Sending Event");
             Transform transform = LocalPlayer._instance._mainCam.transform;
             RaycastHit raycastHit;
             Physics.Raycast(transform.position, transform.forward, out raycastHit, 25f, LayerMask.GetMask(new string[]
@@ -46,8 +46,23 @@ namespace IngameShop.IngameTools
             if (raycastHit.collider.transform.root.name.Contains("Shop"))
             {
                 GameObject shop = raycastHit.collider.transform.root.gameObject;
-                if (CommonSendSyncEvent(shop)) { return "SUCCESS Sending Event"; }
-                else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
+                switch (eventType)
+                {
+                    case ShopEventType.Sync:
+                        if (CommonSendSyncEvent(shop)) { return "SUCCESS Sending Event"; }
+                        else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
+                    case ShopEventType.AllDicts:
+                        if (CommonSendSyncDictEvent(shop, ShopEventType.AllDicts)) { return "SUCCESS Sending Event"; }
+                        else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
+                    case ShopEventType.InventoryItemsDict:
+                        if (CommonSendSyncDictEvent(shop, ShopEventType.InventoryItemsDict)) { return "SUCCESS Sending Event"; }
+                        else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
+                    case ShopEventType.PurchasedItemsDict:
+                        if (CommonSendSyncDictEvent(shop, ShopEventType.PurchasedItemsDict)) { return "SUCCESS Sending Event"; }
+                        else { return "FAILED, Something went wrong in CommonSendSyncEvent"; }
+                    default:
+                        return "FAILED, Not Valid ShopEvent Given";
+                }
 
             }
             else { return "FAILED, Shop Not Found In Hit"; }
@@ -80,6 +95,13 @@ namespace IngameShop.IngameTools
                 toPlayerName: null
                 );
             return true;
+        }
+
+        public static bool CommonSendSyncDictEvent(string uniqueId, ShopEventType eventType)
+        {
+            GameObject shop = ShopPrefabs.FindShopByUniqueId(uniqueId);
+            bool sucess = CommonSendSyncDictEvent(shop, eventType);
+            return sucess;
         }
 
         public static bool CommonSendSyncDictEvent(GameObject shop, ShopEventType eventType)
@@ -126,6 +148,8 @@ namespace IngameShop.IngameTools
                         toPlayerName: null
                         );
                     break;
+                default:
+                    return false;
             }
             return true;
         }
@@ -135,7 +159,8 @@ namespace IngameShop.IngameTools
             AllDicts,
             PurchasedItemsDict,
             InventoryItemsDict,
-            PricesDict
+            PricesDict,
+            Sync
         }
     }
 }
