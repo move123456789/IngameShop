@@ -19,6 +19,17 @@ namespace IngameShop.Mono
         private Text item1Quantity = null;
         private Text item1Price = null;
         private GameObject previewItem1 = null;
+        // Item 2
+        private GameObject item2 = null;
+        private Text item2Quantity = null;
+        private Text item2Price = null;
+        private GameObject previewItem2 = null;
+        // Item 3
+        private GameObject item3 = null;
+        private Text item3Quantity = null;
+        private Text item3Price = null;
+        private GameObject previewItem3 = null;
+
         private GameObject[] previewItemSlots;
         private Text[] itemQuantity;
         private Text[] itemPrice;
@@ -35,6 +46,17 @@ namespace IngameShop.Mono
                 item1Quantity = item1.transform.FindDeepChild("Quantity").GetComponent<Text>();
                 item1Price = item1.transform.FindDeepChild("Price").GetComponent<Text>();
                 previewItem1 = item1.transform.FindChild("Item").gameObject;
+
+                item2 = buyStation.transform.FindChild("2").gameObject;
+                item2Quantity = item2.transform.FindDeepChild("Quantity").GetComponent<Text>();
+                item2Price = item2.transform.FindDeepChild("Price").GetComponent<Text>();
+                previewItem2 = item2.transform.FindChild("Item").gameObject;
+
+                item3 = buyStation.transform.FindChild("3").gameObject;
+                item3Quantity = item3.transform.FindDeepChild("Quantity").GetComponent<Text>();
+                item3Price = item3.transform.FindDeepChild("Price").GetComponent<Text>();
+                previewItem3 = item3.transform.FindChild("Item").gameObject;
+
             }
             else { RLog.Error("[ShopWorldUi] [Start] GameObject BuyStation Not Found! Critical, Ui Won't Work"); }
 

@@ -27,6 +27,11 @@ public class IngameShopUi
     internal static SUiElement<SLabelOptions> Item3;
     internal static SUiElement<SLabelOptions> Item4;
     internal static SUiElement<SLabelOptions> Item5;
+    internal static SUiElement<STextboxOptions> setItem1Price;
+    internal static SUiElement<STextboxOptions> setItem2Price;
+    internal static SUiElement<STextboxOptions> setItem3Price;
+    internal static SUiElement<STextboxOptions> setItem4Price;
+    internal static SUiElement<STextboxOptions> setItem5Price;
     internal static SUiElement<SLabelOptions> FoundItem;
     internal static SUiElement<SLabelOptions> AddItemButton;
     internal static SUiElement<SContainerOptions> Item1RowContainer;
@@ -36,6 +41,7 @@ public class IngameShopUi
     internal static SUiElement<SContainerOptions> Item5RowContainer;
     internal static SUiElement<SContainerOptions> InputItemIdContainer;
     internal static SUiElement<SContainerOptions> AddItemContainer;
+    internal static SUiElement<STextboxOptions>[] SetItemPriceTextBoxArray = new SUiElement<STextboxOptions>[] { setItem1Price, setItem2Price, setItem3Price, setItem4Price, setItem5Price };
     //.Background(ColorFromString("#4287f5"))
 
     // Recive Item UI
@@ -117,7 +123,7 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item1.SetParent(Item1RowContainer);
 
-        var setItem1Price = STextbox
+        setItem1Price = STextbox
             .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(10).FontSize(24).Text("Price ID:")
             .HFill().Notify(SetPrice1FromUI);
@@ -143,7 +149,7 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item2.SetParent(Item2RowContainer);
 
-        var setItem2Price = STextbox
+        setItem2Price = STextbox
             .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(10).FontSize(24).Text("Price ID:")
             .HFill().Notify(SetPrice2FromUI);
@@ -169,7 +175,7 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item3.SetParent(Item3RowContainer);
 
-        var setItem3Price = STextbox
+        setItem3Price = STextbox
             .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(10).FontSize(24).Text("Price ID:")
             .HFill().Notify(SetPrice3FromUI);
@@ -195,7 +201,7 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item4.SetParent(Item4RowContainer);
 
-        var setItem4Price = STextbox
+        setItem4Price = STextbox
             .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(10).FontSize(24).Text("Price ID:")
             .HFill().Notify(SetPrice4FromUI);
@@ -221,7 +227,7 @@ public class IngameShopUi
             .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
         Item5.SetParent(Item5RowContainer);
 
-        var setItem5Price = STextbox
+        setItem5Price = STextbox
             .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(10).FontSize(24).Text("Price ID:")
             .HFill().Notify(SetPrice5FromUI);
@@ -265,6 +271,8 @@ public class IngameShopUi
             AddItemFromUi();
         });
         AddItemButton.SetParent(AddItemContainer);
+        // Update To Avioid NULL Throwing
+        SetItemPriceTextBoxArray = new SUiElement<STextboxOptions>[] { setItem1Price, setItem2Price, setItem3Price, setItem4Price, setItem5Price };
 
         // ShopBougthUi // ShopBougthUi // ShopBougthUi // ShopBougthUi //
         var recivePanel = RegisterNewPanel("ShopBougthUi", true)
