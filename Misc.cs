@@ -93,6 +93,7 @@ namespace IngameShop
             AddOnQuitWorld();
             ShopPrefabs.SetupShopPrefab();
             Network.Manager.RegisterEvents();
+            IngameTools.HotKeyCommandsIntegration.Setup();
         }
 
         public static GameObject FindObjectInSpecificScene(string sceneName = "SonsMain", string objectName = "ModalDialogManager") // ModalDialogManager as Standard

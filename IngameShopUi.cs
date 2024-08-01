@@ -68,7 +68,7 @@ public class IngameShopUi
 
     public static void Create()
     {
-        var panel = RegisterNewPanel("ShopAdminUi")
+        var panel = RegisterNewPanel("ShopAdminUi", true)
            .Dock(EDockType.Fill).OverrideSorting(100);
 
         ClosePanel("ShopAdminUi");
@@ -267,7 +267,7 @@ public class IngameShopUi
         AddItemButton.SetParent(AddItemContainer);
 
         // ShopBougthUi // ShopBougthUi // ShopBougthUi // ShopBougthUi //
-        var recivePanel = RegisterNewPanel("ShopBougthUi")
+        var recivePanel = RegisterNewPanel("ShopBougthUi", true)
            .Dock(EDockType.Fill).OverrideSorting(100);
 
         ClosePanel("ShopBougthUi");
@@ -294,7 +294,7 @@ public class IngameShopUi
         title1.SetParent(recivePanel);
 
         InfoMessage = SLabel.Text("[INFO MESSAGE]")
-            .FontColor("#444").Font(EFont.RobotoRegular)
+            .FontColor(Color.white).Font(EFont.RobotoRegular)
             .PHeight(100).FontSize(32)
             .Anchor(AnchorType.TopCenter)
             .Position(null, -300)
@@ -525,10 +525,10 @@ public class IngameShopUi
                             else
                             {
                                 IngameShopUi.OpenPanel("ShopAdminUi");
-                                if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
-                                {
-                                    PauseMenu._instance.Open();
-                                }
+                                //if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
+                                //{
+                                //    PauseMenu._instance.Open();
+                                //}
                                 IngameShopUi.inventory = shopInventory;
                                 IngameShopUi.UpdateItemsUI();
 
@@ -539,10 +539,10 @@ public class IngameShopUi
                     else if (shopGeneric.remove.IsActive)
                     {
                         IngameShopUi.OpenPanel("ShopBougthUi");
-                        if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
-                        {
-                            PauseMenu._instance.Open();
-                        }
+                        //if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
+                        //{
+                        //    PauseMenu._instance.Open();
+                        //}
                         IngameShopUi.inventory = shopInventory;
                         IngameShopUi.UpdateTakeItemsUI();
                     }
@@ -780,6 +780,9 @@ public class IngameShopUi
                     SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
                     SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
                     Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
+                    string uniqueIdFromInventory = inventory.GetUniqueId();
+                    if (string.IsNullOrEmpty(uniqueIdFromInventory)) { Misc.Msg("[TakeItemFromPurchasedItemsDict] UniqueId is Null/Empty, Can't Send Network Event! Aborting"); return; }
+                    IngameTools.SyncShopTools.CommonSendSyncDictEvent(uniqueIdFromInventory, IngameTools.SyncShopTools.ShopEventType.PurchasedItemsDict);
                 }
                 else
                 {
@@ -813,6 +816,9 @@ public class IngameShopUi
                     SendUiMessage(InfoMessage, $"Added 1x {itemID} To Inventory");
                     SonsTools.ShowMessage($"Added 1x {itemID} To Inventory");
                     Misc.Msg($"[TakeItemFromPurchasedItemsDict] Added 1x {itemID} To Inventory");
+                    string uniqueIdFromInventory = inventory.GetUniqueId();
+                    if (string.IsNullOrEmpty(uniqueIdFromInventory)) { Misc.Msg("[TakeItemFromPurchasedItemsDict] UniqueId is Null/Empty, Can't Send Network Event! Aborting"); return; }
+                    IngameTools.SyncShopTools.CommonSendSyncDictEvent(uniqueIdFromInventory, IngameTools.SyncShopTools.ShopEventType.PurchasedItemsDict);
                 }
                 else
                 {

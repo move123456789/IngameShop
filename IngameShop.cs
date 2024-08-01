@@ -93,7 +93,7 @@ public class IngameShop : SonsMod
                 ItemTesting(78, raycastHit, "held");
                 break;
             case "sync":
-                IngameTools.SyncShopTools.SendSyncEventLookingAt();
+                IngameTools.SyncShopTools.SendSyncEventLookingAt(eventType: SyncShopTools.ShopEventType.Sync);
                 break;
             default:
                 break;

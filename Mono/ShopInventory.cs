@@ -10,10 +10,12 @@ namespace IngameShop.Mono
         public Dictionary<int, int> HeldInventory = new Dictionary<int, int>();
         private Dictionary<int, int> PriceDict = new Dictionary<int, int>();
         private Mono.ShopWorldUi shopWorldUi = null;
+        private string UniqueId = string.Empty;
 
         private void Start()
         {
             if (shopWorldUi == null) { shopWorldUi = gameObject.GetComponent<Mono.ShopWorldUi>(); }
+            if (string.IsNullOrEmpty(UniqueId)) { UniqueId = gameObject.GetComponent<Mono.ShopGeneric>().UniqueId; }
         }
 
         public void AddItem(int itemID, int quantity)
@@ -188,6 +190,10 @@ namespace IngameShop.Mono
             {
                 Misc.Msg($"{itemID} Not Found In Inventory");
             }
+        }
+        public string GetUniqueId()
+        {
+            return UniqueId;
         }
     }
 }
