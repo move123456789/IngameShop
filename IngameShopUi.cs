@@ -511,12 +511,14 @@ public class IngameShopUi
                             {
                                 if (heldController.Amount == 1)
                                 {
+                                    if (heldController.HeldItem == null) { Misc.Msg("[OnKeyClick] heldController.HeldItem Is Null!"); return; }
                                     heldController.PutDown(false, false, false);
                                     int item = heldController.HeldItem._itemID;
                                     shopInventory.AddItem(item, 1);
                                 }
                                 else
                                 {
+                                    if (heldController.HeldItem == null) { Misc.Msg("[OnKeyClick] heldController.HeldItem Is Null!"); return; }
                                     int item = heldController.HeldItem._itemID;
                                     heldController.PutDown(false, false, false);
                                     shopInventory.AddItem(item, heldController.Amount);
@@ -525,10 +527,6 @@ public class IngameShopUi
                             else
                             {
                                 IngameShopUi.OpenPanel("ShopAdminUi");
-                                //if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
-                                //{
-                                //    PauseMenu._instance.Open();
-                                //}
                                 IngameShopUi.inventory = shopInventory;
                                 IngameShopUi.UpdateItemsUI();
 
@@ -539,10 +537,6 @@ public class IngameShopUi
                     else if (shopGeneric.remove.IsActive)
                     {
                         IngameShopUi.OpenPanel("ShopBougthUi");
-                        //if (!PauseMenu.IsActive && PauseMenu._instance.CanBeOpened())
-                        //{
-                        //    PauseMenu._instance.Open();
-                        //}
                         IngameShopUi.inventory = shopInventory;
                         IngameShopUi.UpdateTakeItemsUI();
                     }

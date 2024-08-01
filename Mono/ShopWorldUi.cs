@@ -376,9 +376,11 @@ namespace IngameShop.Mono
         {
             bool removedItem = false;
             Dictionary<int, int> priceDict = inventory.GetPriceDict();
-            if (priceDict == null || priceDict.Keys.Count == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Price Dictonary Is Empy"); return; }
+            if (priceDict == null || priceDict.Keys.Count == 0) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Price Dictonary Is Empy, Aborting"); return; }
+            if (previewItemSlots[index].transform.GetChild(0) == null) { Misc.Msg($"[ShopWorldUi] [PurchaseItem] previewItemSlots[{index}].transform.GetChild(0) == null, Aborting"); return; }
+            if (previewItemSlots[index].transform.GetChild(0).gameObject == null) { Misc.Msg($"[ShopWorldUi] [PurchaseItem] previewItemSlots[{index}].transform.GetChild(0).gameObject == null, Aborting"); return; }
             string activeBuyItemName = previewItemSlots[index].transform.GetChild(0).gameObject.name; // Should Always Be Active Sell Item On Slot
-            if (string.IsNullOrEmpty(activeBuyItemName)) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Purchase Item Not Found"); return; }
+            if (string.IsNullOrEmpty(activeBuyItemName)) { Misc.Msg("[ShopWorldUi] [PurchaseItem] Purchase Item Not Found, Aborting"); return; }
             int itemIdFromGO;
             if (int.TryParse(activeBuyItemName, out itemIdFromGO))
             {

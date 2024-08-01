@@ -97,6 +97,45 @@ namespace IngameShop.IngameTools
             return true;
         }
 
+        public static bool CommonSendSyncEvent(GameObject shop, string toPlayerSteamId)  // Host Sends This Event On Player Join From public static bool CommonSendSyncEvent(string uniqueId, string playerSteamId
+        {
+            if (string.IsNullOrEmpty(toPlayerSteamId)) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] To Player SteamId Null/Empty, Aborting"); }
+            if (string.IsNullOrWhiteSpace(toPlayerSteamId)) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] To Player SteamId Null/WhiteSpace, Aborting"); }
+            Mono.ShopGeneric shopGeneric = shop.GetComponent<Mono.ShopGeneric>();
+            if (shopGeneric == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] ShopGeneric Component Not Found On Object, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.UniqueId)) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] UniqueId Null/Empty, Aborting"); return false; }
+            if (shopGeneric.gameObject.transform.position == Vector3.zero) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Shop Pos == Vector3.zero, Aborting"); return false; }
+            Mono.ShopInventory shopInventory = shop.GetComponent<Mono.ShopInventory>();
+            if (shopInventory == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Shop Inventory Is Null, Aborting"); return false; }
+            (Dictionary<int, int> purchashedItemsDict, Dictionary<int, int> heldInventoryDict, Dictionary<int, int> pricesDict) = shopInventory.GetAllDicts();
+            if (string.IsNullOrEmpty(shopGeneric.SteamId.ToString())) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] SteamId Null/Empty, Aborting"); return false; }
+            if (shopGeneric.SteamId.ToString() == "0") { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] SteamId 0, Aborting"); return false; }
+            if (string.IsNullOrEmpty(shopGeneric.GetOwner())) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Owner Name Null/Empty, Aborting"); return false; }
+            SyncSingeShopEvent.RaiseSyncSingeShopEvent(
+                uniqueId: shopGeneric.UniqueId,
+                pos: shopGeneric.gameObject.transform.position,
+                rot: shopGeneric.gameObject.transform.rotation,
+                sPos: null,
+                sRot: null,
+                purchasedItems: purchashedItemsDict,
+                inventoryItems: heldInventoryDict,
+                prices: pricesDict,
+                shopOwnerId: shopGeneric.SteamId.ToString(),
+                shopOwnerName: shopGeneric.GetOwner(),
+                toPlayerId: toPlayerSteamId,
+                toPlayerName: null
+                );
+            return true;
+        }
+
+        public static bool CommonSendSyncEvent(string uniqueId, string toPlayerSteamId) // Host Sends This Event On Player Join
+        {
+            GameObject shop = ShopPrefabs.FindShopByUniqueId(uniqueId);
+            if (shop == null) { Misc.Msg("[SyncShopTools] [CommonSendSyncEvent()] Shop Not Found From UniqueId, Aborting"); return false; }
+            bool status = CommonSendSyncEvent(shop, toPlayerSteamId);
+            return status;
+        }
+
         public static bool CommonSendSyncDictEvent(string uniqueId, ShopEventType eventType)
         {
             GameObject shop = ShopPrefabs.FindShopByUniqueId(uniqueId);
