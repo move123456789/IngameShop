@@ -18,6 +18,7 @@ namespace IngameShop.Network
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopPurchasedItemsDict>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopInventoryItemsDict>();
                 SimpleNetworkEvents.EventDispatcher.RegisterEvent<Network.UpdateSingeShopPricesDict>();
+                SendJoinedServerEvent();
             }
         }
         public static void UnregisterEvents()
@@ -41,6 +42,7 @@ namespace IngameShop.Network
         {
             if (Misc.hostMode == Misc.SimpleSaveGameType.MultiplayerClient)
             {
+                Misc.Msg("[Manager] I Joined Server, Sending JoinedServerEvent");
                 (ulong steamId, string stringSteamId) = Misc.MySteamId();
                 SimpleNetworkEvents.EventDispatcher.RaiseEvent(new Network.JoinedServer
                 {

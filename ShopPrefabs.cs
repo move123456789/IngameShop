@@ -113,7 +113,7 @@ namespace IngameShop
                     item1LinkUi._applyText = false;
                     item1LinkUi._applyTexture = true;
                     item1LinkUi._texture = Assets.BuyIcon;
-                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._maxDistance = 1.2f;
                     item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
                     item1LinkUi._text = "";
                     item1LinkUi._uiElementId = "screen.take";
@@ -126,7 +126,7 @@ namespace IngameShop
                     item1LinkUi._applyText = false;
                     item1LinkUi._applyTexture = true;
                     item1LinkUi._texture = Assets.BuyIcon;
-                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._maxDistance = 1.2f;
                     item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
                     item1LinkUi._text = "";
                     item1LinkUi._uiElementId = "screen.take";
@@ -139,7 +139,7 @@ namespace IngameShop
                     item1LinkUi._applyText = false;
                     item1LinkUi._applyTexture = true;
                     item1LinkUi._texture = Assets.BuyIcon;
-                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._maxDistance = 1.2f;
                     item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
                     item1LinkUi._text = "";
                     item1LinkUi._uiElementId = "screen.take";
