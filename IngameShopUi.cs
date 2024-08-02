@@ -19,31 +19,6 @@ public class IngameShopUi
     private static readonly Color ComponentBlack = new(0, 0, 0, 0.6f);
     public static Mono.ShopInventory inventory;
 
-    // Add Item UI
-    internal static SUiElement<STextboxOptions> InputItemId;
-    internal static SUiElement<SLabelOptions> AddedItemsLabel;
-    internal static SUiElement<SLabelOptions> Item1;
-    internal static SUiElement<SLabelOptions> Item2;
-    internal static SUiElement<SLabelOptions> Item3;
-    internal static SUiElement<SLabelOptions> Item4;
-    internal static SUiElement<SLabelOptions> Item5;
-    internal static SUiElement<STextboxOptions> setItem1Price;
-    internal static SUiElement<STextboxOptions> setItem2Price;
-    internal static SUiElement<STextboxOptions> setItem3Price;
-    internal static SUiElement<STextboxOptions> setItem4Price;
-    internal static SUiElement<STextboxOptions> setItem5Price;
-    internal static SUiElement<SLabelOptions> FoundItem;
-    internal static SUiElement<SLabelOptions> AddItemButton;
-    internal static SUiElement<SContainerOptions> Item1RowContainer;
-    internal static SUiElement<SContainerOptions> Item2RowContainer;
-    internal static SUiElement<SContainerOptions> Item3RowContainer;
-    internal static SUiElement<SContainerOptions> Item4RowContainer;
-    internal static SUiElement<SContainerOptions> Item5RowContainer;
-    internal static SUiElement<SContainerOptions> InputItemIdContainer;
-    internal static SUiElement<SContainerOptions> AddItemContainer;
-    internal static SUiElement<STextboxOptions>[] SetItemPriceTextBoxArray = new SUiElement<STextboxOptions>[] { setItem1Price, setItem2Price, setItem3Price, setItem4Price, setItem5Price };
-    //.Background(ColorFromString("#4287f5"))
-
     // Recive Item UI
     internal static SUiElement<SContainerOptions> Item1Recive;
     internal static SUiElement<SContainerOptions> Item2Recive;
@@ -74,206 +49,6 @@ public class IngameShopUi
 
     public static void Create()
     {
-        var panel = RegisterNewPanel("ShopAdminUi", true)
-           .Dock(EDockType.Fill).OverrideSorting(100);
-
-        ClosePanel("ShopAdminUi");
-
-        var mainContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Background(MainBgBlack).Margin(200);
-        panel.Add(mainContainer);
-
-        //var title = SLabel.Text("IngameShop")
-        //    .FontColor("#444").Font(EFont.RobotoRegular)
-        //    .PHeight(100).FontSize(32)
-        //    .HFill().Position(null, -40)
-        //    .FontSpacing(10);
-        //title.SetParent(mainContainer);
-
-        var exitButton = SBgButton
-            .Text("x").Background(GetBackgroundSprite(EBackground.Round28), Image.Type.Sliced).Color(ColorFromString("#FF234B"))
-            .Pivot(1, 1).Anchor(AnchorType.TopRight).Position(-60, -60)
-            .Size(60, 60).Ppu(1.7f).Notify(CloseAddPanel);
-        exitButton.SetParent(mainContainer);
-
-        AddedItemsLabel = SLabel.Text("Added Items:")
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(32).Anchor(AnchorType.TopCenter).Position(0, -60)
-            .FontSpacing(10);
-        AddedItemsLabel.SetParent(mainContainer);
-
-        var CoulumContainer = SScrollContainer
-            .Dock(EDockType.Fill)
-            .Vertical(10, "EX")
-            .Padding(100, 100, 150, 0)
-            .As<SScrollContainerOptions>();
-        CoulumContainer.ContainerObject.Spacing(4);
-        CoulumContainer.SetParent(mainContainer);
-
-        // Item 1
-        Item1RowContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50);
-        Item1RowContainer.SetParent(CoulumContainer);
-        Item1 = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
-            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item1.SetParent(Item1RowContainer);
-
-        setItem1Price = STextbox
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(24).Text("Price ID:")
-            .HFill().Notify(SetPrice1FromUI);
-        setItem1Price.SetParent(Item1RowContainer);
-
-        var Item1Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item1Btn.OnClick(() =>
-        {
-            RemoveItemFromUi(Item1);
-        });
-        Item1Btn.SetParent(Item1RowContainer);
-
-        // Item 2
-        Item2RowContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50)
-            .Visible(false);
-        Item2RowContainer.SetParent(CoulumContainer);
-        Item2 = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
-            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item2.SetParent(Item2RowContainer);
-
-        setItem2Price = STextbox
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(24).Text("Price ID:")
-            .HFill().Notify(SetPrice2FromUI);
-        setItem2Price.SetParent(Item2RowContainer);
-
-        var Item2Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item2Btn.OnClick(() =>
-        {
-            RemoveItemFromUi(Item2);
-        });
-        Item2Btn.SetParent(Item2RowContainer);
-
-        // Item 3
-        Item3RowContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50)
-            .Visible(false);
-        Item3RowContainer.SetParent(CoulumContainer);
-        Item3 = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
-            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item3.SetParent(Item3RowContainer);
-
-        setItem3Price = STextbox
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(24).Text("Price ID:")
-            .HFill().Notify(SetPrice3FromUI);
-        setItem3Price.SetParent(Item3RowContainer);
-
-        var Item3Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item3Btn.OnClick(() =>
-        {
-            RemoveItemFromUi(Item3);
-        });
-        Item3Btn.SetParent(Item3RowContainer);
-
-        // Item 4
-        Item4RowContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50)
-            .Visible(false);
-        Item4RowContainer.SetParent(CoulumContainer);
-        Item4 = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
-            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item4.SetParent(Item4RowContainer);
-
-        setItem4Price = STextbox
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(24).Text("Price ID:")
-            .HFill().Notify(SetPrice4FromUI);
-        setItem4Price.SetParent(Item4RowContainer);
-
-        var Item4Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item4Btn.OnClick(() =>
-        {
-            RemoveItemFromUi(Item4);
-        });
-        Item4Btn.SetParent(Item4RowContainer);
-
-        // Item 5
-        Item5RowContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50)
-            .Visible(false);
-        Item5RowContainer.SetParent(CoulumContainer);
-        Item5 = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10)
-            .PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item5.SetParent(Item5RowContainer);
-
-        setItem5Price = STextbox
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(24).Text("Price ID:")
-            .HFill().Notify(SetPrice5FromUI);
-        setItem5Price.SetParent(Item5RowContainer);
-
-        var Item5Btn = SLabel.Text("Remove x1").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50);
-        Item5Btn.OnClick(() =>
-        {
-            RemoveItemFromUi(Item5);
-        });
-        Item5Btn.SetParent(Item5RowContainer);
-
-        // Input Item ID
-        InputItemIdContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50);
-        InputItemIdContainer.SetParent(CoulumContainer);
-        InputItemId = STextbox.Text("Input Item ID: ")
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(28)
-            .HFill().Notify(UpdateItemIdText);
-        InputItemId.SetParent(InputItemIdContainer);
-
-        FoundItem = SLabel.Text("[ITEMNAME]:[ITEM QUANTITY]")
-            .FontColor(Color.white).Font(EFont.RobotoRegular)
-            .PHeight(10).FontSize(28).Alignment(TextAlignmentOptions.Midline)
-            .FontSpacing(10).Visible(false);
-        FoundItem.SetParent(InputItemIdContainer);
-
-        AddItemContainer = SContainer
-            .Dock(EDockType.Fill)
-            .Horizontal(0, "EE")
-            .Background(ComponentBlack)
-            .Height(50);
-        AddItemContainer.SetParent(CoulumContainer);
-        AddItemButton = SLabel.Text("Add 1x Item From Inventory").FontColor(Color.white).Font(EFont.RobotoRegular).FontSize(32).FontSpacing(10).PHeight(10).Alignment(TextAlignmentOptions.Midline).Margin(50).Visible(false);
-        AddItemButton.OnClick(() =>
-        {
-            AddItemFromUi();
-        });
-        AddItemButton.SetParent(AddItemContainer);
-        // Update To Avioid NULL Throwing
-        SetItemPriceTextBoxArray = new SUiElement<STextboxOptions>[] { setItem1Price, setItem2Price, setItem3Price, setItem4Price, setItem5Price };
-
         // ShopBougthUi // ShopBougthUi // ShopBougthUi // ShopBougthUi //
         var recivePanel = RegisterNewPanel("ShopBougthUi", true)
            .Dock(EDockType.Fill).OverrideSorting(100);
@@ -290,7 +65,7 @@ public class IngameShopUi
             .Text("x").Background(GetBackgroundSprite(EBackground.Round28), Image.Type.Sliced).Color(ColorFromString("#FF234B"))
             .Pivot(1, 1).Anchor(AnchorType.TopRight).Position(-60, -60)
             .Size(60, 60).Ppu(1.7f).Notify(CloseBougthPanel);
-        exitButton.SetParent(recivePanel);
+        exitButton1.SetParent(recivePanel);
 
         var title1 = SLabel.Text("IngameShop")
             .FontColor("#444").Font(EFont.RobotoRegular)
@@ -534,9 +309,10 @@ public class IngameShopUi
                             }
                             else
                             {
-                                IngameShopUi.OpenPanel("ShopAdminUi");
+                                //IngameShopUi.OpenPanel("ShopAdminUi");
+                                UI.Setup.OpenUI();
                                 IngameShopUi.inventory = shopInventory;
-                                IngameShopUi.UpdateItemsUI();
+                                //IngameShopUi.UpdateItemsUI();
 
                             }
                         }
@@ -606,25 +382,25 @@ public class IngameShopUi
     }
 
 
-    private static void UpdateItemIdText(string text)
-    {
-        _itemIdText = text;
-        if (ItemIdTextInt != 0)
-        {
-            ItemData item = ItemDatabaseManager.ItemById(ItemIdTextInt);
-            if (item != null)
-            {
-                if (item.Id != 0)
-                {
-                    FoundItem.Visible(true);
-                    AddItemButton.Visible(true);
-                    FoundItem.Text($"Item: {item.Name}, ItemId: {ItemIdTextInt}");
-                }
-            }
+    //private static void UpdateItemIdText(string text)
+    //{
+    //    _itemIdText = text;
+    //    if (ItemIdTextInt != 0)
+    //    {
+    //        ItemData item = ItemDatabaseManager.ItemById(ItemIdTextInt);
+    //        if (item != null)
+    //        {
+    //            if (item.Id != 0)
+    //            {
+    //                FoundItem.Visible(true);
+    //                AddItemButton.Visible(true);
+    //                FoundItem.Text($"Item: {item.Name}, ItemId: {ItemIdTextInt}");
+    //            }
+    //        }
             
             
-        } else { FoundItem.Visible(false); AddItemButton.Visible(false); }
-    }
+    //    } else { FoundItem.Visible(false); AddItemButton.Visible(false); }
+    //}
     private static string _itemIdText;
     public static string ItemIdText { get { return _itemIdText; } }
     public static int ItemIdTextInt
@@ -660,72 +436,72 @@ public class IngameShopUi
                 Misc.Msg($"Added 1x: {ItemIdTextInt} To Shop");
                 inventory.AddItem(ItemIdTextInt, 1);
                 LocalPlayer.Inventory.RemoveItem(ItemIdTextInt, 1);
-                UpdateItemsUI();
+                //UpdateItemsUI();
             }
             
         }
     }
 
-    public static void SetPrice1FromUI(string text)
-    {
-        int itemId;
-        if (int.TryParse(text, out itemId))
-        {
-            SetPrice(itemId, 1);
-        }
-    }
-    private static void SetPrice2FromUI(string text)
-    {
-        int itemId;
-        if (int.TryParse(text, out itemId))
-        {
-            SetPrice(itemId, 2);
-        }
-    }
-    private static void SetPrice3FromUI(string text)
-    {
-        int itemId;
-        if (int.TryParse(text, out itemId))
-        {
-            SetPrice(itemId, 3);
-        }
-    }
-    private static void SetPrice4FromUI(string text)
-    {
-        int itemId;
-        if (int.TryParse(text, out itemId))
-        {
-            SetPrice(itemId, 4);
-        }
-    }
-    private static void SetPrice5FromUI(string text)
-    {
-        int itemId;
-        if (int.TryParse(text, out itemId))
-        {
-            SetPrice(itemId, 5);
-        }
-    }
+    //public static void SetPrice1FromUI(string text)
+    //{
+    //    int itemId;
+    //    if (int.TryParse(text, out itemId))
+    //    {
+    //        SetPrice(itemId, 1);
+    //    }
+    //}
+    //private static void SetPrice2FromUI(string text)
+    //{
+    //    int itemId;
+    //    if (int.TryParse(text, out itemId))
+    //    {
+    //        SetPrice(itemId, 2);
+    //    }
+    //}
+    //private static void SetPrice3FromUI(string text)
+    //{
+    //    int itemId;
+    //    if (int.TryParse(text, out itemId))
+    //    {
+    //        SetPrice(itemId, 3);
+    //    }
+    //}
+    //private static void SetPrice4FromUI(string text)
+    //{
+    //    int itemId;
+    //    if (int.TryParse(text, out itemId))
+    //    {
+    //        SetPrice(itemId, 4);
+    //    }
+    //}
+    //private static void SetPrice5FromUI(string text)
+    //{
+    //    int itemId;
+    //    if (int.TryParse(text, out itemId))
+    //    {
+    //        SetPrice(itemId, 5);
+    //    }
+    //}
 
-    public static void SetPrice(int itemId, int element)
-    {
-        ItemData item = ItemDatabaseManager.ItemById(itemId);
-        if (item != null)
-        {
-            if (item.Id != 0)
-            {
-                var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
-                string text = itemUIElements[element - 1].TextObject.text;
-                int? itemIdExtracted = ExtractItemKey(text);
-                if (itemIdExtracted != null)
-                {
-                    inventory.SetPrice((int)itemIdExtracted, itemId);
-                    inventory.UpdatePriceUi();
-                }
+    //public static void SetPrice(int itemId, int element)
+    //{
+    //    ItemData item = ItemDatabaseManager.ItemById(itemId);
+    //    if (item != null)
+    //    {
+    //        if (item.Id != 0)
+    //        {
+    //            var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
+    //            string text = itemUIElements[element - 1].TextObject.text;
+    //            int? itemIdExtracted = ExtractItemKey(text);
+    //            if (itemIdExtracted != null)
+    //            {
+    //                inventory.SetPrice((int)itemIdExtracted, itemId);
+    //                inventory.UpdatePriceUi();
+    //            }
                 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     public static void RemoveItemFromUi(SUiElement<SLabelOptions> item)
     {
@@ -751,7 +527,7 @@ public class IngameShopUi
                     Misc.Msg($"Inventory Full Can't Remove Item");
                 }
 
-                UpdateItemsUI();
+                //UpdateItemsUI();
             }
             
         }
@@ -837,35 +613,35 @@ public class IngameShopUi
         }
     }
 
-    public static void UpdateItemsUI()
-    {
-        if (inventory != null)
-        {
-            // Assuming you have an array or list of UI elements for the items
-            var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
-            var containerUIElements = new[] { Item1RowContainer, Item2RowContainer, Item3RowContainer, Item4RowContainer, Item5RowContainer };
-            int index = 0;
+    //public static void UpdateItemsUI()
+    //{
+    //    if (inventory != null)
+    //    {
+    //        // Assuming you have an array or list of UI elements for the items
+    //        var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
+    //        var containerUIElements = new[] { Item1RowContainer, Item2RowContainer, Item3RowContainer, Item4RowContainer, Item5RowContainer };
+    //        int index = 0;
 
-            foreach (KeyValuePair<int, int> item in inventory.HeldInventory)
-            {
-                if (index >= itemUIElements.Length)
-                    break;
+    //        foreach (KeyValuePair<int, int> item in inventory.HeldInventory)
+    //        {
+    //            if (index >= itemUIElements.Length)
+    //                break;
 
-                var uiElement = itemUIElements[index];
-                var containerUiElement = containerUIElements[index];
-                containerUiElement.Visible(true);
-                uiElement.Text($"ItemId: {item.Key}, Amount: {item.Value}");
+    //            var uiElement = itemUIElements[index];
+    //            var containerUiElement = containerUIElements[index];
+    //            containerUiElement.Visible(true);
+    //            uiElement.Text($"ItemId: {item.Key}, Amount: {item.Value}");
 
-                index++;
-            }
+    //            index++;
+    //        }
 
-            // Hide any remaining UI elements
-            for (; index < itemUIElements.Length; index++)
-            {
-                containerUIElements[index].Visible(false);
-            }
-        }
-    }
+    //        // Hide any remaining UI elements
+    //        for (; index < itemUIElements.Length; index++)
+    //        {
+    //            containerUIElements[index].Visible(false);
+    //        }
+    //    }
+    //}
 
     public static void UpdateTakeItemsUI()
     {
@@ -965,25 +741,25 @@ public class IngameShopUi
         return null;
     }
 
-    public static void UITesting()
-    {
-        OpenPanel("ShopAdminUi");
-        var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
-        var containerUIElements = new[] { Item1RowContainer, Item2RowContainer, Item3RowContainer, Item4RowContainer, Item5RowContainer };
-        foreach ( var item in containerUIElements )
-        {
-            item.Visible(true);
-        }
-        foreach ( var item in itemUIElements )
-        {
-            item.Text("ItemId: 392, Amount: 5");
-        }
-        Item1.Text("ItemId: 664, Amount: 5");
-        Item2.Text("ItemId: 555, Amount: 4");
-        Item3.Text("ItemId: 444, Amount: 3");
+    //public static void UITesting()
+    //{
+    //    OpenPanel("ShopAdminUi");
+    //    var itemUIElements = new[] { Item1, Item2, Item3, Item4, Item5 };
+    //    var containerUIElements = new[] { Item1RowContainer, Item2RowContainer, Item3RowContainer, Item4RowContainer, Item5RowContainer };
+    //    foreach ( var item in containerUIElements )
+    //    {
+    //        item.Visible(true);
+    //    }
+    //    foreach ( var item in itemUIElements )
+    //    {
+    //        item.Text("ItemId: 392, Amount: 5");
+    //    }
+    //    Item1.Text("ItemId: 664, Amount: 5");
+    //    Item2.Text("ItemId: 555, Amount: 4");
+    //    Item3.Text("ItemId: 444, Amount: 3");
 
-        Misc.Msg($"Item 1 Text: [{Item1.TextObject.text}]");
-    }
+    //    Misc.Msg($"Item 1 Text: [{Item1.TextObject.text}]");
+    //}
 
     public static void UITesting2()
     {
@@ -1004,14 +780,4 @@ public class IngameShopUi
 
 
     private static bool isUiMessageRunning;
-
-    //internal static void SetFloorNumber(int floorNumber)
-    //{
-    //    ElevatorCurrentFloor.Text($"Floor: {floorNumber}");
-    //}
-
-    //internal static void SetGotoFloorMessage(int message)
-    //{
-    //    MainMessage.Text($"Selected Floor: {message}");
-    //}
 }

@@ -81,14 +81,39 @@ namespace IngameShop.UI
                         }
                     }
 
+                    if (uIData.MessageText != null)
+                    {
+                        uIData.MessageText.text = "";  // Hide Message Text Since No Text
+                    }
+
                     // Add To Array
                     uiArray[containerNumber - 1] = uIData;
-
-                    uIData.MessageText.text = "";  // Hide Message Text Since No Text
                 }
             }
         }
 
+        public static void ToggleUi()
+        {
+            if (AddUI != null)
+            {
+                if (AddUI.active) { AddUI.SetActive(false); }
+                if (!AddUI.active) { AddUI.SetActive(true); }
+            }
+        }
+        public static void OpenUI()
+        {
+            if (AddUI != null)
+            {
+                if (!AddUI.active) { AddUI.SetActive(true); }
+            }
+        }
+        public static void CloseUI()
+        {
+            if (AddUI != null)
+            {
+                if (AddUI.active) { AddUI.SetActive(false); }
+            }
+        }
 
         public class UIData
         {

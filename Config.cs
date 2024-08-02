@@ -1,12 +1,12 @@
 using RedLoader;
 using SonsSdk;
+using UnityEngine.UI;
 
 namespace IngameShop;
 
 public static class Config
 {
     internal static ConfigCategory IngameShopCategory { get; private set; }
-
     public static KeybindConfigEntry ToggleMenuKey { get; private set; }
     public static KeybindConfigEntry ExitMenuKey { get; private set; }
     public static ConfigEntry<int> MaxShops { get; private set; }
@@ -75,7 +75,8 @@ public static class Config
         {
             if (Config.Cmd1Disable.Value)
             {
-                IngameShopUi.UITesting();
+                //IngameShopUi.UITesting();
+                UI.Setup.ToggleUi();
             }
         });
 
