@@ -18,5 +18,8 @@ namespace IngameShop
 
         [AssetReference("Buy")]
         public static Texture2D BuyIcon { get; set; }
+
+        [AssetReference("InterActiveUI")]
+        public static GameObject InterActiveUi { get; set; }
     }
 }
