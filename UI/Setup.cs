@@ -55,17 +55,40 @@ namespace IngameShop.UI
 
                     Transform addItemsFromInventory = itemContainer.transform.FindChild("AddFromInventoryButton");
                     uIData.AddItemsFromInventory = addItemsFromInventory.GetComponent<Button>();
-                    uIData.AddItemsFromInventory = addItemsFromInventory.GetComponent<Button>();
+                    uIData.AddItemsFromInventoryGo = addItemsFromInventory.gameObject;
 
                     Transform messageText = itemContainer.transform.FindChild("MessageText");
                     uIData.MessageText = messageText.GetComponent<Text>();
                     uIData.MessageTextGo = messageText.gameObject;
 
+                    if (uIData.AddItemsFromInventory != null)
+                    {
+                        switch (containerNumber - 1)
+                        {
+                            case 0:
+                                Action value = () => UI.Listener.OnItemSpotCenterAddClick(uIData.AddItemsFromInventory);
+                                uIData.AddItemsFromInventory.onClick.AddListener(value);
+                                break; 
+                            case 1:
+                                Action value1 = () => UI.Listener.OnItemSpotRightAddClick(uIData.AddItemsFromInventory);
+                                uIData.AddItemsFromInventory.onClick.AddListener(value1);
+                                break;
+                            case 2:
+                                Action value2 = () => UI.Listener.OnItemSpotLeftAddClick(uIData.AddItemsFromInventory);
+                                uIData.AddItemsFromInventory.onClick.AddListener(value2);
+                                break;
+                            default: break;
+                        }
+                    }
+
                     // Add To Array
                     uiArray[containerNumber - 1] = uIData;
+
+                    uIData.MessageText.text = "";  // Hide Message Text Since No Text
                 }
             }
         }
+
 
         public class UIData
         {
