@@ -60,10 +60,10 @@ namespace IngameShop.Mono
             }
             else { RLog.Error("[ShopWorldUi] [Start] GameObject BuyStation Not Found! Critical, Ui Won't Work"); }
 
-            itemQuantity = new[] { item1Quantity, null, null, null, null };
-            itemPrice = new[] { item1Price, null, null, null, null };
-            itemGameObject = new[] { item1, null, null, null, null };
-            previewItemSlots = new GameObject[] { previewItem1, null, null, null, null };
+            itemQuantity = new[] { item1Quantity, item2Quantity, item3Quantity, null, null };
+            itemPrice = new[] { item1Price, item2Price, item3Price, null, null };
+            itemGameObject = new[] { item1, item2, item3, null, null };
+            previewItemSlots = new GameObject[] { previewItem1, previewItem2, previewItem3, null, null };
 
             HideAllItemsUi();
         }

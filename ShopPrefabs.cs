@@ -119,8 +119,33 @@ namespace IngameShop
                     item1LinkUi._uiElementId = "screen.take";
                     item1LinkUi.enabled = false;
                     item1LinkUi.enabled = true;
-
                     shopGeneric.item1 = item1LinkUi;
+
+                    LinkUiElement item2LinkUi = shopCopy.transform.FindChild("BuyStation").FindChild("2").FindChild("LinkUI").gameObject.AddComponent<LinkUiElement>(); ;
+                    item1LinkUi._applyMaterial = false;
+                    item1LinkUi._applyText = false;
+                    item1LinkUi._applyTexture = true;
+                    item1LinkUi._texture = Assets.BuyIcon;
+                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
+                    item1LinkUi._text = "";
+                    item1LinkUi._uiElementId = "screen.take";
+                    item1LinkUi.enabled = false;
+                    item1LinkUi.enabled = true;
+                    shopGeneric.item2 = item2LinkUi;
+
+                    LinkUiElement item3LinkUi = shopCopy.transform.FindChild("BuyStation").FindChild("3").FindChild("LinkUI").gameObject.AddComponent<LinkUiElement>(); ;
+                    item1LinkUi._applyMaterial = false;
+                    item1LinkUi._applyText = false;
+                    item1LinkUi._applyTexture = true;
+                    item1LinkUi._texture = Assets.BuyIcon;
+                    item1LinkUi._maxDistance = 2;
+                    item1LinkUi._worldSpaceOffset = new Vector3(0, 0, 0);
+                    item1LinkUi._text = "";
+                    item1LinkUi._uiElementId = "screen.take";
+                    item1LinkUi.enabled = false;
+                    item1LinkUi.enabled = true;
+                    shopGeneric.item3 = item3LinkUi;
                 }
 
                 if (Misc.hostMode == Misc.SimpleSaveGameType.Multiplayer)

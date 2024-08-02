@@ -21,6 +21,8 @@ namespace IngameShop.Mono
         public LinkUiElement add;
         public LinkUiElement remove;
         public LinkUiElement item1;
+        public LinkUiElement item2;
+        public LinkUiElement item3;
         public bool shouldRunAdminUi = false;
         private GameObject Shop = null;
 

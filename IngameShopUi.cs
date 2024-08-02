@@ -556,14 +556,14 @@ public class IngameShopUi
                 {
                     shopWorldUi.PurchaseItem(0); // 0 = Item1
                 }
-                //else if (shopGeneric.item2.IsActive)
-                //{
-                //    shopWorldUi.PurchaseItem(1); // 1 = Item2
-                //}
-                //else if (shopGeneric.item3.IsActive)
-                //{
-                //    shopWorldUi.PurchaseItem(2); // 2 = Item3
-                //}
+                else if (shopGeneric.item2.IsActive)
+                {
+                    shopWorldUi.PurchaseItem(1); // 1 = Item2
+                }
+                else if (shopGeneric.item3.IsActive)
+                {
+                    shopWorldUi.PurchaseItem(2); // 2 = Item3
+                }
                 //else if (shopGeneric.item4.IsActive)
                 //{
                 //    shopWorldUi.PurchaseItem(3); // 3 = Item4
