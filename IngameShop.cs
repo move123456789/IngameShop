@@ -38,6 +38,8 @@ public class IngameShop : SonsMod
 
         // Adding Ingame CFG
         SettingsRegistry.CreateSettings(this, null, typeof(Config));
+
+        UI.Setup.SetupUI();
     }
 
     protected override void OnGameStart()
