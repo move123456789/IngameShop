@@ -32,7 +32,7 @@ namespace IngameShop.UI
             return null;
         }
 
-        public static string GetSellDropDownValue(IndexType indexType)
+        public static string GetDropDownValue(DropDownType dropDownType, IndexType indexType)
         {
             int? index = null;
             switch (indexType)
@@ -49,7 +49,16 @@ namespace IngameShop.UI
             }
             if (index != null)
             {
-                Dropdown dd = UI.Setup.uiArray[(int)index].ItemToSellDropDown;
+                Dropdown dd = null;
+                switch (dropDownType)
+                {
+                    case DropDownType.ItemToSellDropDown:
+                        dd = UI.Setup.uiArray[(int)index].ItemToSellDropDown;
+                        break;
+                    case DropDownType.ItemPriceDropDown:
+                        dd = UI.Setup.uiArray[(int)index].SellItemPriceDropDown;
+                        break;
+                }
                 if (dd != null)
                 {
                     string value = GetDropDownValue(dd);
@@ -62,35 +71,6 @@ namespace IngameShop.UI
             return null;
         }
 
-        public static string GetPriceDropDownValue(IndexType indexType)
-        {
-            int? index = null;
-            switch (indexType)
-            {
-                case IndexType.Left:
-                    index = 2;
-                    break;
-                case IndexType.Center:
-                    index = 0;
-                    break;
-                case IndexType.Right:
-                    index = 1;
-                    break;
-            }
-            if (index != null)
-            {
-                Dropdown dd = UI.Setup.uiArray[(int)index].SellItemPriceDropDown;
-                if (dd != null)
-                {
-                    string value = GetDropDownValue(dd);
-                    if (!string.IsNullOrEmpty(value))
-                    {
-                        return value;
-                    }
-                }
-            }
-            return null;
-        }
 
         public static string GetInputFieldValue(InputFieldType inputFieldType, IndexType indexType)
         {
@@ -107,25 +87,28 @@ namespace IngameShop.UI
                     index = 1;
                     break;
             }
-            InputField inputField = null;
-            switch (inputFieldType)
+            if (index != null)
             {
-                case InputFieldType.AmountToAdd:
-                    inputField = UI.Setup.uiArray[(int)index].AmountToAdd;
-                    break;
-                case InputFieldType.PriceAmount:
-                    inputField = UI.Setup.uiArray[(int)index].PricePerItem;
-                    break;
-                case InputFieldType.InputItemId:
-                    inputField = UI.Setup.uiArray[(int)index].InputItemId;
-                    break;
-            }
-            if (index != null && inputField != null)
-            {
-                string value = inputField.text;
-                if (!string.IsNullOrEmpty(value))
+                InputField inputField = null;
+                switch (inputFieldType)
                 {
-                    return value;
+                    case InputFieldType.AmountToAdd:
+                        inputField = UI.Setup.uiArray[(int)index].AmountToAdd;
+                        break;
+                    case InputFieldType.PriceAmount:
+                        inputField = UI.Setup.uiArray[(int)index].PricePerItem;
+                        break;
+                    case InputFieldType.InputItemId:
+                        inputField = UI.Setup.uiArray[(int)index].InputItemId;
+                        break;
+                }
+                if (inputField != null)
+                {
+                    string value = inputField.text;
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        return value;
+                    }
                 }
             }
             return null;
@@ -167,6 +150,12 @@ namespace IngameShop.UI
             InputItemId,
             AmountToAdd,
             PriceAmount
+        }
+
+        public enum DropDownType
+        {
+            ItemToSellDropDown,
+            ItemPriceDropDown,
         }
     }
 }
