@@ -1,5 +1,6 @@
 ﻿
 
+using System.Text.RegularExpressions;
 using UnityEngine.UI;
 
 namespace IngameShop.UI
@@ -32,7 +33,7 @@ namespace IngameShop.UI
             return null;
         }
 
-        public static string GetDropDownValue(DropDownType dropDownType, IndexType indexType)
+        public static string GetDropDownValue(DropDownTypeAddMenu dropDownType, IndexType indexType)
         {
             int? index = null;
             switch (indexType)
@@ -52,11 +53,53 @@ namespace IngameShop.UI
                 Dropdown dd = null;
                 switch (dropDownType)
                 {
-                    case DropDownType.ItemToSellDropDown:
+                    case DropDownTypeAddMenu.ItemToSellDropDown:
                         dd = UI.Setup.uiArray[(int)index].ItemToSellDropDown;
                         break;
-                    case DropDownType.ItemPriceDropDown:
+                    case DropDownTypeAddMenu.ItemPriceDropDown:
                         dd = UI.Setup.uiArray[(int)index].SellItemPriceDropDown;
+                        break;
+                    case DropDownTypeAddMenu.PriceAmount:
+                        dd = UI.Setup.uiArray[(int)index].PricePerItem;
+                        break;
+                }
+                if (dd != null)
+                {
+                    string value = GetDropDownValue(dd);
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        return value;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static string GetDropDownValue(DropDownTypeAddedMenu dropDownType, IndexType indexType)
+        {
+            int? index = null;
+            switch (indexType)
+            {
+                case IndexType.Left:
+                    index = 2;
+                    break;
+                case IndexType.Center:
+                    index = 0;
+                    break;
+                case IndexType.Right:
+                    index = 1;
+                    break;
+            }
+            if (index != null)
+            {
+                Dropdown dd = null;
+                switch (dropDownType)
+                {
+                    case DropDownTypeAddedMenu.ItemPriceDropDown:
+                        dd = UI.Setup.uiArray[(int)index].ItemPriceDropDown;
+                        break;
+                    case DropDownTypeAddedMenu.PriceAmount:
+                        dd = UI.Setup.uiArray[(int)index].PriceAmount;
                         break;
                 }
                 if (dd != null)
@@ -95,9 +138,6 @@ namespace IngameShop.UI
                     case InputFieldType.AmountToAdd:
                         inputField = UI.Setup.uiArray[(int)index].AmountToAdd;
                         break;
-                    case InputFieldType.PriceAmount:
-                        inputField = UI.Setup.uiArray[(int)index].PricePerItem;
-                        break;
                     case InputFieldType.InputItemId:
                         inputField = UI.Setup.uiArray[(int)index].InputItemId;
                         break;
@@ -114,28 +154,76 @@ namespace IngameShop.UI
             return null;
         }
 
-        public static void SetFeedBackText(string feedbackText, IndexType indexType)
+        public static void SetFeedBackText(string feedbackText, UiType uiType)
         {
             if (!string.IsNullOrEmpty(feedbackText))
             {
                 int? index = null;
-                switch (indexType)
+                string addOrAdded = null;
+                switch (uiType)
                 {
-                    case IndexType.Left:
+                    case UiType.AddLeft:
+                        addOrAdded = "Add";
                         index = 2;
                         break;
-                    case IndexType.Center:
+                    case UiType.AddCenter:
+                        addOrAdded = "Add";
                         index = 0;
                         break;
-                    case IndexType.Right:
+                    case UiType.AddRight:
+                        addOrAdded = "Add";
+                        index = 1;
+                        break;
+                    case UiType.AddedLeft:
+                        addOrAdded = "Added";
+                        index = 2;
+                        break;
+                    case UiType.AddedCenter:
+                        addOrAdded = "Added";
+                        index = 0;
+                        break;
+                    case UiType.AddedRight:
+                        addOrAdded = "Added";
                         index = 1;
                         break;
                 }
-                if (index != null)
+                if (index != null && addOrAdded != null)
                 {
-                    UI.Setup.uiArray[(int)index].MessageText.text = feedbackText;
+                    if (addOrAdded.ToLower() == "add")
+                    {
+                        UI.Setup.uiArray[(int)index].MessageText.text = feedbackText;
+                    } 
+                    else if (addOrAdded.ToLower() == "added")
+                    {
+                        UI.Setup.uiArray[(int)index].MessageTextAddedItems.text = feedbackText;
+                    }
                 }
             }
+        }
+
+        public static int ExtractNumberFromParentheses(string input)
+        {
+            // Define a regular expression to match the number inside parentheses
+            Regex regex = new Regex(@"\((\d+)\)$");
+
+            // Match the input string against the regular expression
+            Match match = regex.Match(input);
+
+            if (match.Success)
+            {
+                // Extract the captured group, which is the number inside the parentheses
+                string numberString = match.Groups[1].Value;
+
+                // Parse the number string to an integer
+                if (int.TryParse(numberString, out int number))
+                {
+                    return number;
+                }
+            }
+
+            // If no match is found or parsing fails, return a default value (e.g., 0 or throw an exception)
+            Misc.Msg("Input string does not contain a valid number in parentheses.");
+            return 0;
         }
 
         public enum IndexType
@@ -148,14 +236,31 @@ namespace IngameShop.UI
         public enum InputFieldType
         {
             InputItemId,
-            AmountToAdd,
-            PriceAmount
+            AmountToAdd
         }
 
-        public enum DropDownType
+        public enum DropDownTypeAddMenu
         {
             ItemToSellDropDown,
             ItemPriceDropDown,
+            PriceAmount
+        }
+
+        public enum DropDownTypeAddedMenu
+        {
+            PriceAmount,
+            ItemPriceDropDown
+        }
+
+        public enum UiType
+        {
+            AddLeft,
+            AddedLeft,
+            AddRight,
+            AddedRight,
+            AddCenter,
+            AddedCenter,
+            All
         }
     }
 }

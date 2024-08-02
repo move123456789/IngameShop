@@ -103,7 +103,7 @@ namespace IngameShop.UI
             foreach (GameObject itemContainer in addedItemContainers)
             {
                 string containerName = itemContainer.gameObject.name;
-                char containerNumberChar = containerName[containerName.Length - 1];
+                char containerNumberChar = containerName[containerName.Length - 1];  // Should Always Result In Index 0, 1, 2
                 int containerNumber;
                 if (int.TryParse(containerNumberChar.ToString(), out containerNumber))
                 {

@@ -9,17 +9,20 @@ namespace IngameShop.UI
         public static void OnItemSpotCenterAddClick(Button button)
         {
             // Index 0 in uiArray
+            UI.Logic.AddItemFromInventory(UI.Helpers.UiType.AddCenter);
         }
 
         public static void OnItemSpotRightAddClick(Button button)
         {
             // Index 1 in uiArray
+            UI.Logic.AddItemFromInventory(UI.Helpers.UiType.AddRight);
         }
 
 
         public static void OnItemSpotLeftAddClick(Button button)
         {
             // Index 2 in uiArray
+            UI.Logic.AddItemFromInventory(UI.Helpers.UiType.AddLeft);
         }
 
         public static void OnItemSpotCenterUpdateClick(Button button)
@@ -61,7 +64,7 @@ namespace IngameShop.UI
             // Index 1 in uiArray
         }
 
-        public static void OnItemSpotLeftAddToStoreeClick(Button button)
+        public static void OnItemSpotLeftAddToStoreClick(Button button)
         {
             // Index 2 in uiArray
         }
