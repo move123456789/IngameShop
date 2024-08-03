@@ -105,4 +105,7 @@
     </None>
     <None Remove="ReleaseBuild\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="IngameShop.csproj.user" />
+  </ItemGroup>
 </Project>
