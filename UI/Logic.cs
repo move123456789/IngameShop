@@ -2,7 +2,11 @@
 
 
 
+using IngameShop.Mono;
 using Sons.Items.Core;
+using Sons.Weapon;
+using TheForest.Items.Special;
+using TheForest.Utils;
 
 namespace IngameShop.UI
 {
@@ -96,6 +100,28 @@ namespace IngameShop.UI
                     Helpers.SetFeedBackText("Invalid ItemId Entered", uiType);
                     return;
                 }
+                IHeldOnlyItemController heldC = LocalPlayer.Inventory.HeldOnlyItemController;
+                if (heldC != null)
+                {
+                    if (heldC.Amount > 0)
+                    {
+                        if (heldC.HeldItem == null) { Misc.Msg("[Logic] [AddItemFromInventory] heldController.HeldItem Is Null!"); return; }
+                        int item = heldC.HeldItem._itemID;
+                        if (item == 0) { Misc.Msg("[Logic] [AddItemFromInventory] heldController.HeldItem._itemID == 0"); return; }
+                        if (item == itemData.Id)
+                        {
+                            if (amount > heldC.Amount) { Misc.Msg("[Logic] [AddItemFromInventory] Amount To Add Is Greater Than Amount Held"); Helpers.SetFeedBackText("Amount To Add Is Greater Than Amount Held", uiType); return; }
+                            heldC.PutDown(false, false, false);
+                            //shopInventory.AddItem(item, heldController.Amount);
+                            UI.Helpers.SetItemText();
+                            return;
+                        }
+
+
+                    }
+                }
+
+                string itemName = itemData.Name;
 
 
             }

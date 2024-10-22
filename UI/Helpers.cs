@@ -201,6 +201,86 @@ namespace IngameShop.UI
             }
         }
 
+        public static void SetItemText(string textValue, UiType uiType, UiTextType uiTextType)
+        {
+            if (!string.IsNullOrEmpty(textValue))
+            {
+                int? index = null;
+                switch (uiType)
+                {
+                    case UiType.AddedLeft:
+                        index = 2;
+                        break;
+                    case UiType.AddedCenter:
+                        index = 0;
+                        break;
+                    case UiType.AddedRight:
+                        index = 1;
+                        break;
+                    default:
+                        return;
+                }
+                if (index != null)
+                {
+                    switch (uiTextType)
+                    {
+                        case UiTextType.AddedItemAmount:
+                            UI.Setup.uiArray[(int)index].AddedItemAmount.text = textValue;
+                            break;
+                        case UiTextType.AddedItemName:
+                            UI.Setup.uiArray[(int)index].AddedItemName.text = textValue;
+                            break;
+                    }
+                }
+            }
+        }
+
+        public static string GetItemText(UiType uiType, UiTextType uiTextType)
+        {
+            int? index = null;
+            switch (uiType)
+            {
+                case UiType.AddedLeft:
+                    index = 2;
+                    break;
+                case UiType.AddedCenter:
+                    index = 0;
+                    break;
+                case UiType.AddedRight:
+                    index = 1;
+                    break;
+                default:
+                    return null;
+            }
+            if (index != null)
+            {
+                switch (uiTextType)
+                {
+                    case UiTextType.AddedItemAmount:
+                        string text = UI.Setup.uiArray[(int)index].AddedItemAmount.text;
+                        if (!string.IsNullOrEmpty(text))
+                        {
+                            return text;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    case UiTextType.AddedItemName:
+                        string text1 = UI.Setup.uiArray[(int)index].AddedItemName.text;
+                        if (!string.IsNullOrEmpty(text1))
+                        {
+                            return text1;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                }
+            }
+            return null;
+        }
+
         public static int ExtractNumberFromParentheses(string input)
         {
             // Define a regular expression to match the number inside parentheses
@@ -261,6 +341,12 @@ namespace IngameShop.UI
             AddCenter,
             AddedCenter,
             All
+        }
+
+        public enum UiTextType
+        {
+            AddedItemAmount,
+            AddedItemName
         }
     }
 }
